@@ -20,9 +20,6 @@ void testApp::setup(){
     ofSetVerticalSync(true);
     ofEnableSmoothing();
     
-    // light.setPosition(100,500, 100);
-    cam.setAutoDistance(true);
-    
     // the voronoi pattern itself
     makeTissue(50, ofGetHeight()*0.8, ofGetHeight()*0.8, 20);
 }
@@ -85,10 +82,11 @@ void testApp::draw(){
     ofBackground(255);
     
     // voronoi
+
+
     ofPushMatrix();
-    cam.begin();
-    // light.enable();
-    // ofEnableLighting();
+    ofTranslate(ofGetWidth()/2, ofGetHeight()/2, 0);
+    
     glEnable(GL_DEPTH_TEST);
     if(voronoi){
         for(int i = 0; i < cellMeshes.size(); i++){
@@ -105,9 +103,6 @@ void testApp::draw(){
     }
     
     glDisable(GL_DEPTH_TEST);
-    // ofDisableLighting();
-    // light.disable();
-    cam.end();
     ofPopMatrix();
     
     // particle system

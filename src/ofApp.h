@@ -26,10 +26,7 @@ public:
     void gotMessage(ofMessage msg);
     
     void makeTissue(int _nCells, int _width, int _height, int _deep);
-    
-    ofEasyCam   cam;
-    ofLight     light;
-    
+        
     // void circleResolutionChanged(int & circleResolution);
     
     ofxPanel gui;
