@@ -2,10 +2,10 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
-#include "ofxVoro.h"
 
 #include "particleSystem.hpp"
 #include "attractorClass.hpp"
+#include "voronoi.h"
 
 class testApp : public ofBaseApp{
 public:
@@ -25,7 +25,7 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    void makeTissue(int _nCells, int _width, int _height, int _deep);
+    // void makeTissue(int _nCells, int _width, int _height, int _deep);
         
     // void circleResolutionChanged(int & circleResolution);
     
@@ -37,6 +37,8 @@ public:
 
     // ofxIntSlider resolution;
     
+    VoronoiTissue voronoipattern;
+    
     // particles
     ParticleSystem particleSystem;
     vector<Attractor> attractorVector;
@@ -46,8 +48,8 @@ public:
     int cornerIndex;
     
     //voronoi
-    vector<glm::vec3> cellCentroids;
-    vector<float>   cellRadius;
-    vector<ofVboMesh>  cellMeshes;
-    vector<ofVboMesh>  cellMeshWireframes;
+//    vector<glm::vec3> cellCentroids;
+//    vector<float>   cellRadius;
+//    vector<ofVboMesh>  cellMeshes;
+//    vector<ofVboMesh>  cellMeshWireframes;
 };

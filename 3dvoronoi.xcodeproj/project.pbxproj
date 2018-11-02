@@ -26,6 +26,7 @@
 		C0993D9C98A9E91C1E716814 /* wall.cc in Sources */ = {isa = PBXBuildFile; fileRef = 16E5D715CAF0B4A606B9CC7B /* wall.cc */; };
 		D1858240DCC8AF70467F4A02 /* cell.cc in Sources */ = {isa = PBXBuildFile; fileRef = 518CD547C720BCA9F54712F1 /* cell.cc */; };
 		D74BF211B75A1C87AD9EFD51 /* common.cc in Sources */ = {isa = PBXBuildFile; fileRef = 900FDAA532AAECACD3E66D7B /* common.cc */; };
+		D97B1D78218C4D0400A0D71E /* voronoi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D97B1D77218C4D0400A0D71E /* voronoi.cpp */; };
 		D9CD0B4C218B3E52005C9C19 /* attractorClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9CD0B46218B3E52005C9C19 /* attractorClass.cpp */; };
 		D9CD0B4D218B3E52005C9C19 /* particleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9CD0B48218B3E52005C9C19 /* particleSystem.cpp */; };
 		D9CD0B4E218B3E52005C9C19 /* particleClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9CD0B4B218B3E52005C9C19 /* particleClass.cpp */; };
@@ -95,6 +96,8 @@
 		B87C60311EC1FE841C1ECD89 /* ofxLabel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxLabel.h; path = ../../../addons/ofxGui/src/ofxLabel.h; sourceTree = SOURCE_ROOT; };
 		C70D8946940288799E82131E /* ofxSliderGroup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxSliderGroup.h; path = ../../../addons/ofxGui/src/ofxSliderGroup.h; sourceTree = SOURCE_ROOT; };
 		C88333E71C9457E441C33474 /* ofxButton.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxButton.cpp; path = ../../../addons/ofxGui/src/ofxButton.cpp; sourceTree = SOURCE_ROOT; };
+		D97B1D77218C4D0400A0D71E /* voronoi.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = voronoi.cpp; sourceTree = "<group>"; };
+		D97B1D79218C4D1500A0D71E /* voronoi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = voronoi.h; sourceTree = "<group>"; };
 		D9CD0B46218B3E52005C9C19 /* attractorClass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = attractorClass.cpp; sourceTree = "<group>"; };
 		D9CD0B47218B3E52005C9C19 /* particleClass.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = particleClass.hpp; sourceTree = "<group>"; };
 		D9CD0B48218B3E52005C9C19 /* particleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = particleSystem.cpp; sourceTree = "<group>"; };
@@ -255,6 +258,8 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
+				D97B1D77218C4D0400A0D71E /* voronoi.cpp */,
+				D97B1D79218C4D1500A0D71E /* voronoi.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -383,6 +388,7 @@
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,
 				6F7DDA580CC59064B60B8FC7 /* ofxVoro.cpp in Sources */,
+				D97B1D78218C4D0400A0D71E /* voronoi.cpp in Sources */,
 				D9CD0B4D218B3E52005C9C19 /* particleSystem.cpp in Sources */,
 				D9CD0B4C218B3E52005C9C19 /* attractorClass.cpp in Sources */,
 				5E69B76917398C5AE95B2E17 /* c_loops.cc in Sources */,
