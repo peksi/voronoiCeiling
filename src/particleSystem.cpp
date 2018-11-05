@@ -16,7 +16,33 @@ void ParticleSystem::addParticles(int _count,float _spawnSpeed) {
     }
 }
 void ParticleSystem::removeParticles() {
-    
+    for(vector<Particle>::iterator particleIterator = particleVector.begin();
+        particleIterator != particleVector.end();){
+        
+        if ((*particleIterator).isDead) {
+            particleVector.erase(particleIterator);
+        } else {
+            ++particleIterator;
+        }
+    }
+}
+void ParticleSystem::edgeDetect() {
+    for (int i = 0; i < particleVector.size(); i++) {
+        particleVector[i].edgeDetect();
+    }
+}
+void ParticleSystem::checkLocation(vector<Attractor> _attractorVector) {
+    vector<ofPolyline> attractorPolyVector;
+    for (int i = 0; i < _attractorVector.size(); i++) {
+        for (int j = 0; j < particleVector.size(); j++) {
+            if (_attractorVector[i].attractorPoly.inside(
+                                                         particleVector[j].location.x,
+                                                         particleVector[j].location.y)) {
+                particleVector[j].isDead = true;
+            }
+        }
+    }
+    removeParticles(); // This is the only function to kill particles so can call remove after.
 }
 void ParticleSystem::attractParticles(ofVec2f _attractorCentroid, float _attractorForce) {
     for (int i = 0; i < particleVector.size(); i++) {

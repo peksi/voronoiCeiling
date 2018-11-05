@@ -11,6 +11,7 @@ Attractor::Attractor() {
     cout << "Spawned new attractor" << endl;
     
     attractorShape.setMode(ofPath::POLYLINES);
+    attractorShape.setFillColor(ofColor(0));
     
     cornerCount = 0;
     editState = true;
@@ -43,6 +44,13 @@ void Attractor::setCornerPoints() {
         attractorPoly.addVertex(ofPoint(ofGetMouseX(),ofGetMouseY()));
         attractorPoly.setClosed(true);
         attractorCentroid = attractorPoly.getCentroid2D();
+        
+        // Move polyline indices to ofPath for solid color shape.
+        attractorShape.moveTo(attractorPoly[0]);
+        for( int i = 1; i < attractorPoly.size(); ++i ) {
+            attractorShape.lineTo(attractorPoly[i]);
+        }
+        
     }
 }
 void Attractor::updateShape() {
@@ -51,6 +59,13 @@ void Attractor::updateShape() {
         attractorPoly.addVertex(ofPoint(cornerPoints[i].x,cornerPoints[i].y));
         attractorPoly.setClosed(true); // Mesh was reset so recall setClosed.
         attractorCentroid = attractorPoly.getCentroid2D();
+        
+        // Move polyline indices to ofPath for solid color shape.
+        attractorShape.clear();
+        attractorShape.moveTo(attractorPoly[0]);
+        for( int i = 1; i < attractorPoly.size(); ++i ) {
+            attractorShape.lineTo(attractorPoly[i]);
+        }
     }
 }
 void Attractor::display() {
@@ -62,7 +77,7 @@ void Attractor::display() {
         }
         ofDrawCircle(cornerPoints[i].x, cornerPoints[i].y, 5);
     }
-    attractorShape.draw();
-    attractorPoly.draw();
-    ofDrawCircle(attractorCentroid.x, attractorCentroid.y, 5);
+    attractorShape.draw(); // Draws fill
+    attractorPoly.draw(); // Draws outline
+    ofDrawCircle(attractorCentroid.x, attractorCentroid.y, 5); // draws cornerpoints
 }
