@@ -1,7 +1,7 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void testApp::setup(){
+void ofApp::setup(){
     ofBackground(40);
     ofSetFrameRate(50);
     
@@ -21,10 +21,10 @@ void testApp::setup(){
     ofEnableSmoothing();
     
     // the voronoi pattern itself
-    makeTissue(50, ofGetHeight()*0.8, ofGetHeight()*0.8, 20);
+    makeTissue(50,particleSystem.particleVector, ofGetHeight()*0.8, ofGetHeight()*0.8, 20);
 }
 
-void testApp::makeTissue(int _nCells, int _width, int _height, int _deep){
+void ofApp::makeTissue(int _nCells, vector<Particle> _voronoiPoints, int _width, int _height, int _deep){
     
     //  Fresh begining
     //
@@ -44,9 +44,9 @@ void testApp::makeTissue(int _nCells, int _width, int _height, int _deep){
     con.add_wall(cyl);
     
     //  Add the cell seed to the container
-    for(int i = 0; i < _nCells;i++){
-        glm::vec3 newCell = ofVec3f(ofRandom(-_width*0.5,_width*0.5),
-                                  ofRandom(-_height*0.5,_height*0.5),
+    for(int i = 0; i < _voronoiPoints.size(); i++){
+        glm::vec3 newCell = ofVec3f(_voronoiPoints[i].location.x,
+                                  _voronoiPoints[i].location.y,
                                   0);
         
         
@@ -60,9 +60,11 @@ void testApp::makeTissue(int _nCells, int _width, int _height, int _deep){
 }
 
 //--------------------------------------------------------------
-void testApp::update(){
-    // particle system
-    if (ofGetFrameNum()%25 == 0 && addParticles) {
+void ofApp::update(){
+    // General settings
+    ofSetWindowTitle(ofToString(ofGetFrameRate()));
+    // Particle system
+    if (ofGetFrameNum()%5 == 0 && addParticles) {
         particleSystem.addParticles(1,5);
     }
     
@@ -70,15 +72,14 @@ void testApp::update(){
         particleSystem.attractParticles(attractorVector[i].attractorCentroid,attractorVector[i].attractorMass);
     }
     
-    
+    particleSystem.checkLocation(attractorVector);
     particleSystem.updateParticles();
     
-    // voronoi
-    ofSetWindowTitle(ofToString(ofGetFrameRate()));
+
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
+void ofApp::draw(){
     ofBackground(255);
     
     // voronoi
@@ -118,11 +119,11 @@ void testApp::draw(){
         gui.draw();
     }
     
-
+    makeTissue(grainSize,particleSystem.particleVector, ofGetWidth()*0.8, ofGetHeight()*0.8,20);
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key){
+void ofApp::keyPressed(int key){
     if ( key == 'f'){
         ofToggleFullscreen();
     } else if ( key == 'h'){ // hide gui
@@ -138,22 +139,22 @@ void testApp::keyPressed(int key){
             attractorVector.push_back(*new Attractor); // Init first attractor
         }
     } else {
-        makeTissue(grainSize, ofGetWidth()*0.8, ofGetHeight()*0.8,20);
+        
     }
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key){
+void ofApp::keyReleased(int key){
     
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
+void ofApp::mouseMoved(int x, int y ){
     
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
+void ofApp::mouseDragged(int x, int y, int button){
     for (int i = 0; i < attractorVector.size(); i++) {
         if (attractorVector[i].fullySet == true) {
             
@@ -176,12 +177,12 @@ void testApp::mouseDragged(int x, int y, int button){
 }
 
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
+void ofApp::mousePressed(int x, int y, int button){
     
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void ofApp::mouseReleased(int x, int y, int button){
     if (attractorVector.size() != 0) {
         for (int i = 0; i < attractorVector.size(); i++) {
             if (attractorVector[i].editState == true && attractorVector[i].fullySet == false) {
@@ -200,15 +201,15 @@ void testApp::mouseReleased(int x, int y, int button){
 }
 
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
+void ofApp::windowResized(int w, int h){
 }
 
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){
+void ofApp::gotMessage(ofMessage msg){
     
 }
 
 //--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){
+void ofApp::dragEvent(ofDragInfo dragInfo){
     
 }

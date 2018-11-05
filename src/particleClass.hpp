@@ -13,6 +13,8 @@
 class Particle {
 public:
     void attract(ofVec2f _attractorCentroid, float _attractorMass);
+    void checkLocation(ofPolyline _attractorPoly);
+    bool checkDead();
     void applyForce(ofVec2f _force);
     void update(float _velocityLimit);
     void display();
@@ -20,6 +22,8 @@ public:
     ofVec2f location;
     ofVec2f acceleration;
     ofVec2f velocity;
+    
+    bool isDead;
     
     ofColor particleColor;
     float particleMass;

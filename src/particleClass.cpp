@@ -25,7 +25,7 @@ void Particle::attract(ofVec2f _attractorCentroid, float _attractorMass) {
         speed = ofClamp(speed, 1, 5);
         force.normalize();
         
-        float strength = (1 * _attractorMass * particleMass) / (speed*speed) * (1/speed);
+        float strength = (5 * _attractorMass * particleMass) / (speed*speed) * (1/speed);
         force *= strength;
         
         applyForce(force);

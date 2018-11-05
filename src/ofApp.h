@@ -7,7 +7,7 @@
 #include "particleSystem.hpp"
 #include "attractorClass.hpp"
 
-class testApp : public ofBaseApp{
+class ofApp : public ofBaseApp{
 public:
     void setup();
     void update();
@@ -25,7 +25,7 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    void makeTissue(int _nCells, int _width, int _height, int _deep);
+    void makeTissue(int _nCells,vector<Particle> _voronoiPoints, int _width, int _height, int _deep);
         
     // void circleResolutionChanged(int & circleResolution);
     
