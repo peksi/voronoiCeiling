@@ -18,6 +18,7 @@ public:
     void removeParticles();
     bool checkDead(Particle &p);
     void attractParticles(ofVec2f _attractorCentroid, float _attractorForce);
+    void edgeDetect();
     void checkLocation(vector<Attractor> _attractorVector);
     void updateParticles();
     void displayParticles();

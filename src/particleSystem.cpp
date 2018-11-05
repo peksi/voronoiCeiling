@@ -26,6 +26,11 @@ void ParticleSystem::removeParticles() {
         }
     }
 }
+void ParticleSystem::edgeDetect() {
+    for (int i = 0; i < particleVector.size(); i++) {
+        particleVector[i].edgeDetect();
+    }
+}
 void ParticleSystem::checkLocation(vector<Attractor> _attractorVector) {
     vector<ofPolyline> attractorPolyVector;
     for (int i = 0; i < _attractorVector.size(); i++) {

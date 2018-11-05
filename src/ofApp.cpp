@@ -63,16 +63,18 @@ void ofApp::makeTissue(int _nCells, vector<Particle> _voronoiPoints, int _width,
 void ofApp::update(){
     // General settings
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
+    
     // Particle system
-    if (ofGetFrameNum()%5 == 0 && addParticles) {
+    if (ofGetFrameNum()%1 == 0 && addParticles) {
         particleSystem.addParticles(1,5);
     }
     
     for (int i = 0; i < attractorVector.size(); i++) {
-        particleSystem.attractParticles(attractorVector[i].attractorCentroid,attractorVector[i].attractorMass);
+        particleSystem.attractParticles(attractorVector[i].attractorCentroid,
+                                        attractorVector[i].attractorMass);
     }
-    
-    particleSystem.checkLocation(attractorVector);
+    particleSystem.checkLocation(attractorVector); // checks if particle should be removed
+    particleSystem.edgeDetect();
     particleSystem.updateParticles();
     
 
