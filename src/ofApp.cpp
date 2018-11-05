@@ -22,7 +22,7 @@ void ofApp::setup(){
     
     // the voronoi pattern itself
 
-    voronoipattern.makeTissue(50, ofGetHeight()*0.8, ofGetHeight()*0.8, 20);
+    voronoipattern.makeTissue(grainSize, ofGetHeight()*0.8, ofGetHeight()*0.8, 20);
 
 }
 
@@ -53,7 +53,7 @@ void ofApp::draw(){
     
     // draw voronoi
     if(voronoi){
-        voronoipattern.draw();
+        voronoipattern.drawTissue();
     }
     
     

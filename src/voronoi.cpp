@@ -44,7 +44,7 @@ void VoronoiTissue::makeTissue(int _nCells, int _width, int _height, int _deep){
     cellCentroids = getCellsCentroids(con);
 }
 
-void draw(){
+void VoronoiTissue::drawTissue(){
     ofPushMatrix();
     ofTranslate(ofGetWidth()/2, ofGetHeight()/2, 0); // center the voronoi
     glEnable(GL_DEPTH_TEST);

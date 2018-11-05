@@ -8,7 +8,7 @@ public:
     vector<ofVboMesh>  cellMeshes;
     vector<ofVboMesh>  cellMeshWireframes;
     void makeTissue(int _nCells, int _width, int _height, int _deep);
-    void draw();
+    void drawTissue();
 
     
     VoronoiTissue();
