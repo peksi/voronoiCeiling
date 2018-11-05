@@ -25,11 +25,8 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-<<<<<<< HEAD
     // void makeTissue(int _nCells, int _width, int _height, int _deep);
-=======
-    void makeTissue(int _nCells,vector<Particle> _voronoiPoints, int _width, int _height, int _deep);
->>>>>>> master
+
         
     // void circleResolutionChanged(int & circleResolution);
     
