@@ -70,10 +70,6 @@ void ofApp::draw(){
         gui.draw();
     }
     
-<<<<<<< HEAD
-=======
-    makeTissue(grainSize,particleSystem.particleVector, ofGetWidth()*0.8, ofGetHeight()*0.8,20);
->>>>>>> master
 }
 
 //--------------------------------------------------------------
@@ -93,11 +89,7 @@ void ofApp::keyPressed(int key){
             attractorVector.push_back(*new Attractor); // Init first attractor
         }
     } else {
-<<<<<<< HEAD
         voronoipattern.makeTissue(grainSize, ofGetWidth()*0.8, ofGetHeight()*0.8,20);
-=======
-        
->>>>>>> master
     }
 }
 
