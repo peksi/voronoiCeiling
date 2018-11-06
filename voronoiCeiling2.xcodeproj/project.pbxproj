@@ -34,6 +34,7 @@
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
 		E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */; };
 		F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */; };
+		F2E23A4E2191EE1100C0A611 /* attractorSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F2E23A4C2191EE1100C0A611 /* attractorSystem.cpp */; };
 		FA969A8710BCF6276950D1C1 /* v_compute.cc in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7A5A5AAA2C80C78E1D32B /* v_compute.cc */; };
 /* End PBXBuildFile section */
 
@@ -115,6 +116,8 @@
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		EAC9298DDD680972AEAE50E5 /* container.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = container.cc; path = "../../../addons/ofxVoro/libs/voro++/container.cc"; sourceTree = SOURCE_ROOT; };
 		ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxGuiGroup.cpp; path = ../../../addons/ofxGui/src/ofxGuiGroup.cpp; sourceTree = SOURCE_ROOT; };
+		F2E23A4C2191EE1100C0A611 /* attractorSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = attractorSystem.cpp; sourceTree = "<group>"; };
+		F2E23A4D2191EE1100C0A611 /* attractorSystem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = attractorSystem.hpp; sourceTree = "<group>"; };
 		F6BC3F2FE4E1233071671277 /* pre_container.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = pre_container.cc; path = "../../../addons/ofxVoro/libs/voro++/pre_container.cc"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -255,6 +258,8 @@
 				19245CCA919595E2FAF7A796 /* particleSystem.cpp */,
 				CFF6807324FF58AF46DA8135 /* particleSystem.hpp */,
 				999A1F2F34A90A0F04720DFA /* particleClass.cpp */,
+				F2E23A4C2191EE1100C0A611 /* attractorSystem.cpp */,
+				F2E23A4D2191EE1100C0A611 /* attractorSystem.hpp */,
 				115BF92E382D290B59A3B386 /* particleClass.hpp */,
 				92062D7E33963C984CA0D91B /* attractorClass.cpp */,
 				1C8EFF26D3EC3997BEE4D24B /* attractorClass.hpp */,
@@ -383,6 +388,7 @@
 				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
 				853E0BA2F448076739446874 /* ofxColorPicker.cpp in Sources */,
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
+				F2E23A4E2191EE1100C0A611 /* attractorSystem.cpp in Sources */,
 				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,

@@ -4,8 +4,8 @@
 #include "ofxGui.h"
 
 #include "particleSystem.hpp"
+#include "attractorSystem.hpp"
 #include "attractorClass.hpp"
-#include "voronoi.h"
 
 class ofApp : public ofBaseApp{
 public:
@@ -24,20 +24,12 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-    
-    VoronoiTissue voronoipattern;
-    
+
     // particles
     ParticleSystem particleSystem;
-    vector<Attractor> attractorVector;
-    
-    float distance;
-    int attractorIndex;
-    int cornerIndex;
+    AttractorSystem attractorSystem;
     
     ofxPanel particleGui, attractorGui;
     ofParameterGroup particleGroup;
     ofParameterGroup attractorGroup;
-    ofParameter<bool> showAttractorEdge,showAttractorPoints,showAttractorFill;
-    
 };
