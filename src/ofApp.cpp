@@ -5,16 +5,23 @@ void ofApp::setup(){
     ofBackground(40);
     ofSetFrameRate(50);
     
-
     // gui setup
-    guiHide = false;
-    gui.setup("GUI");
-    gui.add(color.setup("color", ofColor(100, 100, 140), ofColor(0, 0), ofColor(255, 255)));
-    gui.add(grainSize.setup("grain size", 100, 10, 1000));
-    gui.add(voronoi.setup("draw voronoi", false));
-    gui.add(addParticles.setup("add particles", false));
+    particleGroup.add(particleSystem.particleParameters);
+    attractorGroup.setName("Attractor GUI panel");
+    attractorGroup.add(showAttractorEdge.set("Show attractor edge",true));
+    attractorGroup.add(showAttractorPoints.set("Show attractor points",true));
+    attractorGroup.add(showAttractorFill.set("Show attractor fill",true));
     
-
+    
+    particleGui.setup("Particle GUI panel");
+    particleGui.setDefaultWidth(int(ofGetWidth()/4));
+    particleGui.setup(particleGroup);
+    attractorGui.setup("Attractor GUI panel");
+    attractorGui.setDefaultWidth(int(ofGetWidth()/4));
+    attractorGui.setup(attractorGroup);
+    attractorGui.setPosition(particleGui.getPosition().x,
+                             particleGui.getPosition().y+particleGui.getHeight() + 20);
+    
     // magic
     ofEnableAlphaBlending();
     ofSetVerticalSync(true);
@@ -22,7 +29,7 @@ void ofApp::setup(){
     
     // the voronoi pattern itself
 
-    voronoipattern.makeTissue(grainSize, ofGetHeight()*0.8, ofGetHeight()*0.8, 20);
+    voronoipattern.makeTissue(100, ofGetHeight()*0.8, ofGetHeight()*0.8, 20);
 
 }
 
@@ -32,13 +39,17 @@ void ofApp::update(){
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
     
     // Particle system
-    if (ofGetFrameNum()%1 == 0 && addParticles) {
+    if (ofGetFrameNum()%1 == 0) {
         particleSystem.addParticles(1,5);
     }
     
+    
     for (int i = 0; i < attractorVector.size(); i++) {
-        particleSystem.attractParticles(attractorVector[i].attractorCentroid,
-                                        attractorVector[i].attractorMass);
+        if (attractorVector[i].fullySet == true) {
+            particleSystem.attractParticles(attractorVector[i].attractorCentroid,
+                                            attractorVector[i].attractorMass,
+                                            1000);
+        }
     }
     particleSystem.checkLocation(attractorVector); // checks if particle should be removed
     particleSystem.edgeDetect();
@@ -51,23 +62,17 @@ void ofApp::update(){
 void ofApp::draw(){
     ofBackground(255);
     
-    // draw voronoi
-    if(voronoi){
-        voronoipattern.drawTissue();
-    }
-    
-    
     // particle system
     particleSystem.displayParticles();
     
     for (int i = 0; i < attractorVector.size(); i++) {
-        attractorVector[i].display();
+        attractorVector[i].display(showAttractorEdge,showAttractorPoints,showAttractorFill);
     }
-    
     
     // gui
     if(!guiHide){
-        gui.draw();
+        particleGui.draw();
+        attractorGui.draw();
     }
     
 }
@@ -89,7 +94,7 @@ void ofApp::keyPressed(int key){
             attractorVector.push_back(*new Attractor); // Init first attractor
         }
     } else {
-        voronoipattern.makeTissue(grainSize, ofGetWidth()*0.8, ofGetHeight()*0.8,20);
+        voronoipattern.makeTissue(100, ofGetWidth()*0.8, ofGetHeight()*0.8,20);
     }
 }
 

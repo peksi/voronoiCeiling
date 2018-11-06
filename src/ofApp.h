@@ -25,19 +25,6 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    // void makeTissue(int _nCells, int _width, int _height, int _deep);
-
-        
-    // void circleResolutionChanged(int & circleResolution);
-    
-    ofxPanel gui;
-    ofxColorSlider color;
-    ofxIntSlider grainSize;
-    ofxToggle voronoi;
-    ofxToggle addParticles;
-
-    // ofxIntSlider resolution;
-    
     VoronoiTissue voronoipattern;
     
     // particles
@@ -48,9 +35,9 @@ public:
     int attractorIndex;
     int cornerIndex;
     
-    //voronoi
-//    vector<glm::vec3> cellCentroids;
-//    vector<float>   cellRadius;
-//    vector<ofVboMesh>  cellMeshes;
-//    vector<ofVboMesh>  cellMeshWireframes;
+    ofxPanel particleGui, attractorGui;
+    ofParameterGroup particleGroup;
+    ofParameterGroup attractorGroup;
+    ofParameter<bool> showAttractorEdge,showAttractorPoints,showAttractorFill;
+    
 };

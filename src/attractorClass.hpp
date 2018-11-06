@@ -18,7 +18,7 @@ public:
     void setCornerPoints();
     void updateShape();
     void attract(vector<Particle> _particleVector);
-    void display();
+    void display(bool _showEdge, bool _showPoints, bool _showFill);
     
     bool active;
     

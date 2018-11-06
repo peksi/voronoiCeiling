@@ -9,6 +9,7 @@
 #define particleSystem_hpp
 
 #include "ofMain.h"
+#include "ofxGui.h"
 #include "particleClass.hpp"
 #include "attractorClass.hpp"
 
@@ -17,13 +18,21 @@ public:
     void addParticles(int _count, float _spawnSpeed);
     void removeParticles();
     bool checkDead(Particle &p);
-    void attractParticles(ofVec2f _attractorCentroid, float _attractorForce);
+    void attractParticles(ofVec2f _attractorCentroid, float _attractorForce,float _attractionRadius);
     void edgeDetect();
     void checkLocation(vector<Attractor> _attractorVector);
     void updateParticles();
     void displayParticles();
     
     vector<Particle> particleVector;
+    
+    ofParameterGroup particleParameters;
+    ofParameter<int> particleCount;
+    ofParameter<float> particleSpawnSpeed;
+    ofParameter<float> velocityLimit;
+    ofParameter<float> attractorsForce;
+    ofParameter<float> attractorsRadius;
+    ofParameter<bool> spawnParticles,edgeRepel, showParticles,deleteParticles, guiListener;
     
     ParticleSystem();
 };

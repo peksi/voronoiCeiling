@@ -68,16 +68,22 @@ void Attractor::updateShape() {
         }
     }
 }
-void Attractor::display() {
+void Attractor::display(bool _showEdge, bool _showPoints, bool _showFill) {
     for (int i = 0; i < cornerPoints.size(); i++) {
         if (cornerState[i] == true) {
             ofSetColor(0, 255, 0,50);
         } else {
             ofSetColor(0, 0, 255,50);
         }
-        ofDrawCircle(cornerPoints[i].x, cornerPoints[i].y, 5);
+        if (_showPoints == true) {
+            ofDrawCircle(cornerPoints[i].x, cornerPoints[i].y, 5);
+        }
+        
     }
-    attractorShape.draw(); // Draws fill
-    attractorPoly.draw(); // Draws outline
-    ofDrawCircle(attractorCentroid.x, attractorCentroid.y, 5); // draws cornerpoints
+    if (_showFill == true) {
+        attractorShape.draw(); // Draws fill
+    }
+    if (_showEdge == true) {
+        attractorPoly.draw(); // Draws outline
+    }
 }

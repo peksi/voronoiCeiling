@@ -2,3 +2,17 @@
 <GUI>
 	<color>149, 167, 158, 134</color>
 </GUI>
+<group>
+	<Particle_Controls>
+		<Particles_listen_to_GUI_controls>0</Particles_listen_to_GUI_controls>
+		<Particle_count_per_emit>10</Particle_count_per_emit>
+		<Particle_spawn_speed>5</Particle_spawn_speed>
+		<Particle_velocity_limit>5</Particle_velocity_limit>
+		<Attractor_force>1</Attractor_force>
+		<Repel_particles_from_edge>1</Repel_particles_from_edge>
+		<Display_particles>1</Display_particles>
+	</Particle_Controls>
+	<Show_attractor_edge>1</Show_attractor_edge>
+	<Show_attractor_points>1</Show_attractor_points>
+	<Show_attractor_fill>1</Show_attractor_fill>
+</group>

@@ -53,14 +53,27 @@ void Particle::edgeDetect() {
             applyForce(ofVec2f(0.0,pushForceY));
         }
     }
-}
-void Particle::attract(ofVec2f _attractorCentroid, float _attractorMass) {
-    ofVec2f force = _attractorCentroid - location;
-    float speed = _attractorCentroid.distance(location);
-    float attractionRadius = speed;
     
-    if (attractionRadius < 1000) {
-        speed = ofClamp(speed, 1, 5);
+    if (location.x < 0) {
+        location.x = 0;
+    }
+    if (location.x > ofGetWidth()) {
+        location.x = ofGetWidth();
+    }
+    if (location.y < 0) {
+        location.y = 0;
+    }
+    if (location.y > ofGetHeight()) {
+        location.y = ofGetHeight();
+    }
+}
+void Particle::attract(ofVec2f _attractorCentroid, float _attractorMass,int _attractionRadius) {
+    ofVec2f force = _attractorCentroid - location;
+    float dist = _attractorCentroid.distance(location);
+    float attractionRadius = _attractionRadius;
+    
+    if (dist < attractionRadius) {
+        float speed = ofClamp(dist, 1, 5);
         force.normalize();
         
         float strength = (5 * _attractorMass * particleMass) / (speed*speed) * (1/speed);
@@ -79,7 +92,9 @@ void Particle::update(float _velocityLimit) {
     
     acceleration *= 0; // reset acceleration after frame
 }
-void Particle::display() {
-    ofSetColor(particleColor);
-    ofDrawCircle(location.x, location.y, 5);
+void Particle::display(bool _showParticle) {
+    if (_showParticle == true) {
+        ofSetColor(particleColor);
+        ofDrawCircle(location.x, location.y, 5);
+    }
 }
