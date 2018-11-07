@@ -8,6 +8,7 @@
 #include "particleSystem.hpp"
 
 ParticleSystem::ParticleSystem() {
+    // Create GUI for all particles
     particleParameters.setName("Particle GUI panel");
     particleParameters.add(spawnParticles.set("Spawn particles",false));
     particleParameters.add(guiListener.set("Particles listen to GUI controls",false));
@@ -20,10 +21,11 @@ ParticleSystem::ParticleSystem() {
     particleParameters.add(showParticles.set("Display particles",true));
     particleParameters.add(deleteParticles.set("Remove particles by attractor",true));
 }
-void ParticleSystem::addParticles(int _count,float _spawnSpeed) {
-    int count;
-    float spawnSpeed;
+void ParticleSystem::addParticles(ofVec2f _attractorCentroid,int _count,float _spawnSpeed) {
+    int count; // How many particles per burst are spawned
+    float spawnSpeed; // The movement speed of particles being spawned
     
+    // Whether to listen to GUI or to hard-coded input (default)
     if (guiListener == true) {
         count = particleCount;
         spawnSpeed = particleSpawnSpeed;
@@ -34,7 +36,8 @@ void ParticleSystem::addParticles(int _count,float _spawnSpeed) {
     
     if (spawnParticles == true) {
         for (int i = 0; i < count; i++) {
-            particleVector.push_back(*new Particle(ofVec2f(ofGetWidth()/2,ofGetHeight()/2),spawnSpeed));
+            particleVector.push_back(*new Particle(ofVec2f(_attractorCentroid.x,_attractorCentroid.y)
+                                                   ,spawnSpeed));
         }
     }
     
@@ -42,6 +45,7 @@ void ParticleSystem::addParticles(int _count,float _spawnSpeed) {
 void ParticleSystem::removeParticles() {
     bool activeParticleRemove;
     
+    // Whether to listen to GUI or to hard-coded input (default)
     if (guiListener == true) {
         activeParticleRemove = deleteParticles;
     } else {
@@ -63,6 +67,7 @@ void ParticleSystem::removeParticles() {
 void ParticleSystem::edgeDetect() {
     bool activeEdgeDetect;
     
+    // Whether to listen to GUI or to hard-coded input (default)
     if (guiListener == true) {
         activeEdgeDetect = edgeRepel;
     } else {
@@ -73,17 +78,14 @@ void ParticleSystem::edgeDetect() {
         particleVector[i].edgeDetect();
     }
 }
-void ParticleSystem::checkLocation(vector<Attractor> _attractorVector) {
-    vector<ofPolyline> attractorPolyVector;
-    for (int i = 0; i < _attractorVector.size(); i++) {
-        for (int j = 0; j < particleVector.size(); j++) {
-            if (_attractorVector[i].attractorPoly.inside(
-                                                         particleVector[j].location.x,
-                                                         particleVector[j].location.y)) {
-                particleVector[j].isDead = true;
+void ParticleSystem::checkLocation(ofPolyline _attractorPoly) {
+            // Iterate through all particles
+            for (int j = 0; j < particleVector.size(); j++) {
+                if (_attractorPoly.inside(particleVector[j].location.x,
+                                          particleVector[j].location.y)) {
+                    particleVector[j].isDead = true;
+                }
             }
-        }
-    }
     removeParticles(); // This is the only function to kill particles so can call remove after.
 }
 void ParticleSystem::attractParticles(ofVec2f _attractorCentroid, float _attractorForce, float _attractionRadius) {
@@ -92,6 +94,7 @@ void ParticleSystem::attractParticles(ofVec2f _attractorCentroid, float _attract
     float attractorForce;
     float attractionRadius;
     
+    // Whether to listen to GUI or to hard-coded input (default)
     if (guiListener == true) {
         attractorForce = attractorsForce;
         attractionRadius = attractorsRadius;
@@ -112,6 +115,7 @@ void ParticleSystem::updateParticles() {
 void ParticleSystem::displayParticles() {
     bool activeParticleDisplay;
     
+    // Whether to listen to GUI or to hard-coded input (default)
     if (guiListener == true) {
         activeParticleDisplay = showParticles;
     } else {

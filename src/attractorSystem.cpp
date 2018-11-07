@@ -61,6 +61,30 @@ void AttractorSystem::moveAttractorPoints() {
         }
     }
 }
+void AttractorSystem::activateAttractor() {
+    int randomPick = int(ofRandom(0.0,attractorVector.size()-1));
+    
+    // Function to make sure the same attractor isn't chosen again.
+    if (randomPick == lastRandomPick) {
+        if (randomPick == attractorVector.size()) {
+            randomPick -= 1;
+        } else if (randomPick == 0) {
+            randomPick += 1;
+        } else {
+            randomPick += 1;
+        }
+    }
+    
+    for(int i = 0; i < attractorVector.size(); i++) {
+        if (i == randomPick) {
+            attractorVector[i].active = false;
+            lastRandomPick = i;
+            cout << "current dispersing attractor: " + to_string(i) << endl;
+        } else {
+            attractorVector[i].active = true;
+        }
+    }
+}
 void AttractorSystem::displayAttractors() {
     for (int i = 0; i < attractorVector.size(); i++) {
         attractorVector[i].display(showAttractorEdge,showAttractorPoints,showAttractorFill);

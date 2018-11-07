@@ -14,9 +14,10 @@ Attractor::Attractor() {
     attractorShape.setFillColor(ofColor(0));
     
     cornerCount = 0;
+    active = false;
     editState = true;
     fullySet = false;
-    attractorMass = ofRandom(0,0.5);
+    attractorMass = 1;
 }
 void Attractor::activateCornerPoint(int _pointIndex,bool _state) {
     cornerState[_pointIndex] = _state;
@@ -29,6 +30,7 @@ void Attractor::setCornerPoints() {
         cout << "attractor fully set, spawn a new one" << endl;
         fullySet = true;
         editState = false;
+        active = false; // Activate this attractor
         return;
     } else {
         cornerPoints.push_back(*new ofVec2f(ofGetMouseX(),ofGetMouseY()));
@@ -39,10 +41,11 @@ void Attractor::setCornerPoints() {
             cout << "attractor fully set, spawn a new one" << endl;
             fullySet = true;
             editState = false;
+            active =  false; // Activate this attractor
         }
         
         attractorPoly.addVertex(ofPoint(ofGetMouseX(),ofGetMouseY()));
-        attractorPoly.setClosed(true);
+        attractorPoly.setClosed(true); // Mesh was reset so recall setClosed.
         attractorCentroid = attractorPoly.getCentroid2D();
         
         // Move polyline indices to ofPath for solid color shape.
@@ -71,19 +74,23 @@ void Attractor::updateShape() {
 void Attractor::display(bool _showEdge, bool _showPoints, bool _showFill) {
     for (int i = 0; i < cornerPoints.size(); i++) {
         if (cornerState[i] == true) {
+            // Color when set
             ofSetColor(0, 255, 0,50);
         } else {
+            // Color when being editted
             ofSetColor(0, 0, 255,50);
         }
         if (_showPoints == true) {
+            // Draw cornerpoints
             ofDrawCircle(cornerPoints[i].x, cornerPoints[i].y, 5);
         }
-        
     }
     if (_showFill == true) {
-        attractorShape.draw(); // Draws fill
+        // Draws fill
+        attractorShape.draw();
     }
     if (_showEdge == true) {
-        attractorPoly.draw(); // Draws outline
+        // Draws outline
+        attractorPoly.draw();
     }
 }

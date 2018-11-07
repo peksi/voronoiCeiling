@@ -15,12 +15,12 @@
 
 class ParticleSystem {
 public:
-    void addParticles(int _count, float _spawnSpeed);
+    void addParticles(ofVec2f _attractorCentroid,int _count, float _spawnSpeed);
     void removeParticles();
     bool checkDead(Particle &p);
     void attractParticles(ofVec2f _attractorCentroid, float _attractorForce,float _attractionRadius);
     void edgeDetect();
-    void checkLocation(vector<Attractor> _attractorVector);
+    void checkLocation(ofPolyline _attractorPoly);
     void updateParticles();
     void displayParticles();
     

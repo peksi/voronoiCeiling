@@ -5,18 +5,21 @@ void ofApp::setup(){
     ofBackground(40);
     ofSetFrameRate(50);
     
-    // magic
+    // Graphics setup
     ofEnableAlphaBlending();
     ofSetVerticalSync(true);
     ofEnableSmoothing();
     
-    // gui setup
-    particleGroup.add(particleSystem.particleParameters);
-    attractorGroup.add(attractorSystem.attractorParameters);
+    // Init setup
+    lastTime = ofGetElapsedTimef();
     
+    // GUI setup
+    particleGroup.add(particleSystem.particleParameters);
     particleGui.setup("Particle GUI panel");
     particleGui.setDefaultWidth(int(ofGetWidth()/4));
     particleGui.setup(particleGroup);
+    
+    attractorGroup.add(attractorSystem.attractorParameters);
     attractorGui.setup("Attractor GUI panel");
     attractorGui.setDefaultWidth(int(ofGetWidth()/4));
     attractorGui.setup(attractorGroup);
@@ -26,22 +29,30 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    // General settings
+    // GENERAL SETTINGS
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
     
-    // Particle system
-    if (ofGetFrameNum()%1 == 0) {
-        particleSystem.addParticles(1,5);
+    // PARTICLE SYSTEM
+    // Timer system to iterate over dispersing attractors
+    float currentTime = ofGetElapsedTimef();
+    if (currentTime - lastTime > 2) {
+        attractorSystem.activateAttractor();
+        lastTime = currentTime;
     }
     
+    // For loop needed for functions that check [particle <-> attractor] relations.
     for (int i = 0; i < attractorSystem.attractorVector.size(); i++) {
-        if (attractorSystem.attractorVector[i].fullySet == true) {
+        if (attractorSystem.attractorVector[i].active == false) {
+            particleSystem.addParticles(attractorSystem.attractorVector[i].attractorCentroid,
+                                        1, 5);
+        }
+        if (attractorSystem.attractorVector[i].active == true) {
+            particleSystem.checkLocation(attractorSystem.attractorVector[i].attractorPoly);
             particleSystem.attractParticles(attractorSystem.attractorVector[i].attractorCentroid,
                                             attractorSystem.attractorVector[i].attractorMass,
                                             1000);
         }
     }
-    particleSystem.checkLocation(attractorSystem.attractorVector); // checks if particle should be removed
     particleSystem.edgeDetect();
     particleSystem.updateParticles();
 }

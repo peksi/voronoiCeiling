@@ -24,11 +24,16 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
+    
+    // Public variables
+    float lastTime;
 
-    // particles
+    // ParticleSystem
     ParticleSystem particleSystem;
+    // AttractorSystem
     AttractorSystem attractorSystem;
     
+    // GUI
     ofxPanel particleGui, attractorGui;
     ofParameterGroup particleGroup;
     ofParameterGroup attractorGroup;

@@ -11,6 +11,7 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 
+#include "particleSystem.hpp"
 #include "attractorClass.hpp"
 
 class AttractorSystem {
@@ -18,7 +19,10 @@ public:
     void createAttractor();
     void setAttractor();
     void moveAttractorPoints();
+    void activateAttractor();
     void displayAttractors();
+    
+    int lastRandomPick;
     
     vector<Attractor> attractorVector;
     
