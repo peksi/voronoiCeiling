@@ -25,6 +25,30 @@ void ofApp::setup(){
     attractorGui.setup(attractorGroup);
     attractorGui.setPosition(particleGui.getPosition().x,
                              particleGui.getPosition().y+particleGui.getHeight() + 20);
+    
+    // Voronoi setup. Might go elsewhere
+    
+    //  Add the cell seed to the container
+    int nCells = 100;
+    vector<glm::vec2> _points;
+    for(int i = 0; i < nCells;i++){
+        glm::vec2 newPoint = glm::vec2(ofRandom(0,ofGetWidth()), ofRandom(0,ofGetHeight()));
+        
+        _points.push_back(newPoint);
+    }
+    
+    relaxedVoronoi.setBounds(ofRectangle(0,0,ofGetWidth(), ofGetHeight()));
+    relaxedVoronoi.setPoints(_points);
+    relaxedVoronoi.generate();
+    
+    int relaxIterations = 10;
+    while(relaxIterations--){
+        relaxedVoronoi.relax();
+    }
+    
+    curve = false;
+    voronois = relaxedVoronoi.draw(curve);
+    
 }
 
 //--------------------------------------------------------------
@@ -60,6 +84,10 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground(255);
+    // voronoi
+    for(int i=0; i < voronois.size(); i++){
+        voronois[i].draw();
+    }
     
     // particle system
     particleSystem.displayParticles();
