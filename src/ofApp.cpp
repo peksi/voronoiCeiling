@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofBackground(40);
-    ofSetFrameRate(50);
+//    ofSetFrameRate(50);
     
     // Graphics setup
     ofEnableAlphaBlending();
@@ -29,7 +29,7 @@ void ofApp::setup(){
     // Voronoi setup. Might go elsewhere
     
     //  Add the cell seed to the container
-    int nCells = 100;
+    int nCells = 300;
     vector<glm::vec2> _points;
     for(int i = 0; i < nCells;i++){
         glm::vec2 newPoint = glm::vec2(ofRandom(0,ofGetWidth()), ofRandom(0,ofGetHeight()));
@@ -92,6 +92,23 @@ void ofApp::draw(){
     // particle system
     particleSystem.displayParticles();
     attractorSystem.displayAttractors();
+    
+    
+    // example for getting the centroids
+    centroids = relaxedVoronoi.getPoints();
+    for(int i = 0; i < centroids.size(); i++){
+        ofDrawCircle(centroids[i], 3);
+    }
+    
+    // example for getting the vertexes and drawing one
+    vertices = relaxedVoronoi.getCells();
+    ofFill();
+    ofSetColor(220, 0, 0);
+    // draw couple of vertexes just for the sake of it
+    ofDrawCircle(vertices[0].pts[0], 10);
+    ofDrawCircle(vertices[0].pts[1], 10);
+    
+    
     
     // gui
     if(!guiHide){

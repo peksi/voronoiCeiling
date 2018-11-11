@@ -46,4 +46,6 @@ public:
     // Voronoi
     ofxVoronoi relaxedVoronoi;
     vector<ofPolyline> voronois;
+    vector<glm::vec2> centroids;
+    vector <ofxVoronoiCell> vertices;
 };
