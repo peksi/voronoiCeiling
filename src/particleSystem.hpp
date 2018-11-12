@@ -15,6 +15,7 @@
 
 class ParticleSystem {
 public:
+    void toggleParticles();
     void addParticles(ofVec2f _attractorCentroid,int _count, float _spawnSpeed);
     void removeParticles();
     bool checkDead(Particle &p);

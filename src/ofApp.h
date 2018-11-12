@@ -36,6 +36,9 @@ public:
     ParticleSystem particleSystem;
     // AttractorSystem
     AttractorSystem attractorSystem;
+    // VBO holder
+    vector<ofVbo> vboVector;
+    vector<ofVec3f> vboCentroids;
     
     // GUI
     ofxPanel particleGui, attractorGui, voronoiGui;

@@ -1,5 +1,13 @@
 #include "ofApp.h"
 
+ofFloatColor c[] = {
+    ofFloatColor(ofRandom(1.0),ofRandom(1.0),ofRandom(1.0)),
+    ofFloatColor(ofRandom(1.0),ofRandom(1.0),ofRandom(1.0)),
+    ofFloatColor(ofRandom(1.0),ofRandom(1.0),ofRandom(1.0)),
+    ofFloatColor(ofRandom(1.0),ofRandom(1.0),ofRandom(1.0)),
+    ofFloatColor(ofRandom(1.0),ofRandom(1.0),ofRandom(1.0)),
+};
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofBackground(40);
@@ -9,6 +17,8 @@ void ofApp::setup(){
     ofEnableAlphaBlending();
     ofSetVerticalSync(true);
     ofEnableSmoothing();
+    //glEnable(GL_DEPTH_TEST);
+    
     
     // Init setup
     lastTime = ofGetElapsedTimef();
@@ -26,17 +36,19 @@ void ofApp::setup(){
     attractorGui.setPosition(particleGui.getPosition().x,
                              particleGui.getPosition().y+particleGui.getHeight() + 20);
     
-    // Voronoi setup. Might go elsewhere
-    
-    //  Add the cell seed to the container
+    // Voronoi setup.
+    // Add the cell seed to the container
+    /*
     int nCells = 100;
     vector<glm::vec2> _points;
     for(int i = 0; i < nCells;i++){
-        glm::vec2 newPoint = glm::vec2(ofRandom(0,ofGetWidth()), ofRandom(0,ofGetHeight()));
+        glm::vec2 newPoint = glm::vec2(
+                                       ofRandom(0,ofGetWidth()),
+                                       ofRandom(0,ofGetHeight())
+                                       );
         
         _points.push_back(newPoint);
     }
-    
     relaxedVoronoi.setBounds(ofRectangle(0,0,ofGetWidth(), ofGetHeight()));
     relaxedVoronoi.setPoints(_points);
     relaxedVoronoi.generate();
@@ -46,11 +58,26 @@ void ofApp::setup(){
         relaxedVoronoi.relax();
     }
     
-    curve = false;
-    voronois = relaxedVoronoi.draw(curve);
+    curve = true;
+    relaxedVoronoi.draw(true);
+     */
+    const ofVec3f Verts[] = {
+        ofVec3f(ofRandom(0,ofGetWidth()),ofRandom(0,ofGetHeight()),0.0),
+        ofVec3f(ofRandom(0,ofGetWidth()),ofRandom(0,ofGetHeight()),0.0),
+        ofVec3f(ofRandom(0,ofGetWidth()),ofRandom(0,ofGetHeight()),0.0),
+        ofVec3f(ofRandom(0,ofGetWidth()),ofRandom(0,ofGetHeight()),0.0),
+        ofVec3f(ofRandom(0,ofGetWidth()),ofRandom(0,ofGetHeight()),0.0),
+    };
+    const ofIndexType Faces[] = {0,1,2,3,4};
     
+    int vboCount = 10;
+    for (int i = 0; i < vboCount; i++) {
+        vboVector.push_back(*new ofVbo); // Free up slot for this VBO
+        vboVector[i].setVertexData( &Verts[0], 5, GL_STATIC_DRAW );
+        vboVector[i].setColorData( &c[0], 5, GL_DYNAMIC_DRAW );
+        vboVector[i].setIndexData( &Faces[0], 5, GL_STATIC_DRAW );
+    }
 }
-
 //--------------------------------------------------------------
 void ofApp::update(){
     // GENERAL SETTINGS
@@ -85,8 +112,25 @@ void ofApp::update(){
 void ofApp::draw(){
     ofBackground(255);
     // voronoi
+    /*
     for(int i=0; i < voronois.size(); i++){
         voronois[i].draw();
+    }
+     */
+    
+    // VBO
+    for (int i = 0; i < vboVector.size();i++) {
+        for (int j = 0; j < particleSystem.particleVector.size(); j++) {
+            for (int x = 0; x < 5; x++) {
+                c[x] = ofFloatColor(ofRandom(1.0),ofRandom(1.0),ofRandom(1.0));
+            }
+        }
+    }
+
+    for (int i = 0; i < vboVector.size();i++) {
+        glPointSize(10.f);
+        vboVector[i].updateColorData(&c[0], 5);
+        vboVector[i].drawElements(GL_TRIANGLES, 60); // placeholder values
     }
     
     // particle system
@@ -108,6 +152,8 @@ void ofApp::keyPressed(int key){
         guiHide = !guiHide;
     } else if (key == 'p') {
         attractorSystem.createAttractor();
+    } else if (key == 's') {
+        particleSystem.toggleParticles();
     }
 }
 

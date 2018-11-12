@@ -21,6 +21,9 @@ ParticleSystem::ParticleSystem() {
     particleParameters.add(showParticles.set("Display particles",true));
     particleParameters.add(deleteParticles.set("Remove particles by attractor",true));
 }
+void ParticleSystem::toggleParticles() {
+    spawnParticles = !spawnParticles;
+}
 void ParticleSystem::addParticles(ofVec2f _attractorCentroid,int _count,float _spawnSpeed) {
     int count; // How many particles per burst are spawned
     float spawnSpeed; // The movement speed of particles being spawned
