@@ -46,8 +46,33 @@ void ofApp::setup(){
         relaxedVoronoi.relax();
     }
     
-    curve = false;
-    voronois = relaxedVoronoi.draw(curve);
+    vector<ofxVoronoiCell> tempCells = relaxedVoronoi.getCells();
+    int k = 0;
+    
+    for (int i = 0; i < tempCells.size() ; i++) {
+        vector<glm::vec2> tempCell = tempCells[i].pts;
+        
+        vector<ofVec3f> tempCell3d;
+        vector<ofIndexType> tempIndices;
+        vector<ofFloatColor> tempColors;
+        
+        for(int j = 0; j < tempCell.size(); j++){
+            tempCell3d.push_back(ofVec3f(tempCell[j].x, tempCell[j].y, 0.0f));
+            tempColors.push_back(ofFloatColor(ofRandom(1.0)));
+            tempIndices.push_back(j);
+        }
+        
+        vboVerts.push_back(tempCell3d);
+        vboFaces.push_back(tempIndices);
+        vboColor.push_back(tempColors);
+    }
+    
+    for (int i = 0; i < vboVerts.size(); i++) {
+        vboVector.push_back(*new ofVbo); // Free up slot for this VBO
+        vboVector[i].setVertexData( &vboVerts[i][0], vboVerts[i].size(), GL_STATIC_DRAW );
+        vboVector[i].setIndexData( &vboFaces[i][0], vboVerts[i].size(), GL_STATIC_DRAW );
+        vboVector[i].setColorData( &vboColor[i][0], 5, GL_DYNAMIC_DRAW );
+    }
     
 }
 
@@ -84,36 +109,22 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground(255);
-    // voronoi
-    for(int i=0; i < voronois.size(); i++){
-        voronois[i].draw();
-    }
     
     // particle system
     particleSystem.displayParticles();
     attractorSystem.displayAttractors();
     
-    
-    // example for getting the centroids
-    centroids = relaxedVoronoi.getPoints();
-    for(int i = 0; i < centroids.size(); i++){
-        ofDrawCircle(centroids[i], 3);
-    }
-    
-    // example for getting the vertexes and drawing one
-    vertices = relaxedVoronoi.getCells();
-    ofFill();
-    ofSetColor(220, 0, 0);
-    // draw couple of vertexes just for the sake of it
-    ofDrawCircle(vertices[0].pts[0], 10);
-    ofDrawCircle(vertices[0].pts[1], 10);
-    
-    
-    
     // gui
     if(!guiHide){
         particleGui.draw();
         attractorGui.draw();
+    }
+    
+    // VBO
+    for (int i = 0; i < vboVector.size();i++) {
+        glPointSize(10.f);
+        vboVector[i].drawElements(GL_POLYGON, vboVerts[i].size()); // placeholder values
+        
     }
 }
 

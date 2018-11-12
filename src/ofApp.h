@@ -37,6 +37,14 @@ public:
     // AttractorSystem
     AttractorSystem attractorSystem;
     
+    // VBO
+    vector<ofVbo> vboVector;
+    vector<vector<ofVec3f>> vboVerts;
+    vector<vector<ofIndexType>> vboFaces;
+    vector<vector<ofFloatColor>> vboColor;
+    
+    //const ofVec3f Verts[];
+    
     // GUI
     ofxPanel particleGui, attractorGui, voronoiGui;
     ofParameterGroup particleGroup;
@@ -47,5 +55,5 @@ public:
     ofxVoronoi relaxedVoronoi;
     vector<ofPolyline> voronois;
     vector<glm::vec2> centroids;
-    vector <ofxVoronoiCell> vertices;
+    vector<ofxVoronoiCell> vertices; // returns glm::vec2 vector
 };
