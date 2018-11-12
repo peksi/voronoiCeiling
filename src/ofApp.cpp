@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofBackground(40);
-//    ofSetFrameRate(50);
+    // ofSetFrameRate(60);
     
     // Graphics setup
     ofEnableAlphaBlending();
@@ -41,14 +41,15 @@ void ofApp::setup(){
     relaxedVoronoi.setPoints(_points);
     relaxedVoronoi.generate();
     
+    voronoiCentroids = relaxedVoronoi.getPoints();
+    
     int relaxIterations = 10;
     while(relaxIterations--){
         relaxedVoronoi.relax();
     }
     
+    // VBO construction
     vector<ofxVoronoiCell> tempCells = relaxedVoronoi.getCells();
-    int k = 0;
-    
     for (int i = 0; i < tempCells.size() ; i++) {
         vector<glm::vec2> tempCell = tempCells[i].pts;
         
@@ -58,7 +59,7 @@ void ofApp::setup(){
         
         for(int j = 0; j < tempCell.size(); j++){
             tempCell3d.push_back(ofVec3f(tempCell[j].x, tempCell[j].y, 0.0f));
-            tempColors.push_back(ofFloatColor(ofRandom(1.0)));
+            tempColors.push_back(ofFloatColor(ofRandom(1.0),ofRandom(1.0),ofRandom(1.0),1.0));
             tempIndices.push_back(j);
         }
         
@@ -71,7 +72,7 @@ void ofApp::setup(){
         vboVector.push_back(*new ofVbo); // Free up slot for this VBO
         vboVector[i].setVertexData( &vboVerts[i][0], vboVerts[i].size(), GL_STATIC_DRAW );
         vboVector[i].setIndexData( &vboFaces[i][0], vboVerts[i].size(), GL_STATIC_DRAW );
-        vboVector[i].setColorData( &vboColor[i][0], 5, GL_DYNAMIC_DRAW );
+        vboVector[i].setColorData( &vboColor[i][0], vboVerts[i].size(), GL_DYNAMIC_DRAW );
     }
     
 }
@@ -110,21 +111,50 @@ void ofApp::update(){
 void ofApp::draw(){
     ofBackground(255);
     
+    // VBO
+    for (int i = 0; i < vboVector.size();i++) {
+        glPointSize(10.f);
+        vboVector[i].drawElements(GL_POLYGON, vboVerts[i].size()); // placeholder values
+    }
+    
     // particle system
     particleSystem.displayParticles();
     attractorSystem.displayAttractors();
+    
+    // Checking system
+    for (int i = 0; i < voronoiCentroids.size(); i++) {
+        for (int j = 0; j < particleSystem.particleVector.size(); j++) {
+            glm::vec2 tempCentroid = voronoiCentroids[i];
+            Particle tempParticle = particleSystem.particleVector[j];
+            
+            ofVec2f centroidLocation = ofVec2f(tempCentroid.x,tempCentroid.y);
+            ofVec2f particleLocation = ofVec2f(tempParticle.location.x,tempParticle.location.y);
+            
+            float centroidDistance = centroidLocation.distance(particleLocation);
+            
+            if (centroidDistance < 50) {
+                int nearestVertex = 0;
+                int vertexDistanceHolder = 50;
+                for (int k = 0; k < vboVerts[i].size(); k++) {
+                    ofVec2f VertexLocation = ofVec3f(vboVerts[i][k].x, vboVerts[i][k].y);
+                    float vertexDistance = VertexLocation.distance(particleLocation);
+                    
+                    if (vertexDistance < vertexDistanceHolder) {
+                        vertexDistanceHolder = vertexDistance;
+                        nearestVertex = k;
+                    }
+                    
+                    vboColor[i][k] = ofFloatColor(ofFloatColor(ofRandom(1.0),ofRandom(1.0),ofRandom(1.0),1.0));
+                    vboVector[i].updateColorData(&vboColor[i][0], vboVerts[i].size());
+                }
+            }
+        }
+    }
     
     // gui
     if(!guiHide){
         particleGui.draw();
         attractorGui.draw();
-    }
-    
-    // VBO
-    for (int i = 0; i < vboVector.size();i++) {
-        glPointSize(10.f);
-        vboVector[i].drawElements(GL_POLYGON, vboVerts[i].size()); // placeholder values
-        
     }
 }
 
