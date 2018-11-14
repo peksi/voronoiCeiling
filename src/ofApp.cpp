@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofBackground(40);
-    // ofSetFrameRate(60);
+    ofSetFrameRate(50);
     
     // Graphics setup
     ofEnableAlphaBlending();
@@ -55,17 +55,25 @@ void ofApp::setup(){
         
         vector<ofVec3f> tempCell3d;
         vector<ofIndexType> tempIndices;
+        vector<float> tempColorChannels;
         vector<ofFloatColor> tempColors;
         
         for(int j = 0; j < tempCell.size(); j++){
             tempCell3d.push_back(ofVec3f(tempCell[j].x, tempCell[j].y, 0.0f));
-            tempColors.push_back(ofFloatColor(ofRandom(1.0),ofRandom(1.0),ofRandom(1.0),1.0));
+            tempColorChannels.push_back(ofRandom(1.0));
+            tempColorChannels.push_back(ofRandom(1.0));
+            tempColorChannels.push_back(ofRandom(1.0));
+            tempColors.push_back(ofFloatColor(tempColorChannels[j], // Red channel
+                                              tempColorChannels[j+1], // Green channel
+                                              tempColorChannels[j+2]  // Blue channel
+                                              ));
             tempIndices.push_back(j);
         }
         
         vboVerts.push_back(tempCell3d);
         vboFaces.push_back(tempIndices);
         vboColor.push_back(tempColors);
+        vboColorChannels.push_back(tempColorChannels);
     }
     
     for (int i = 0; i < vboVerts.size(); i++) {
@@ -133,19 +141,28 @@ void ofApp::draw(){
             float centroidDistance = centroidLocation.distance(particleLocation);
             
             if (centroidDistance < 50) {
-                int nearestVertex = 0;
-                int vertexDistanceHolder = 50;
+                int nearestVertex;
+                float vertexDistanceHolder = 50;
                 for (int k = 0; k < vboVerts[i].size(); k++) {
-                    ofVec2f VertexLocation = ofVec3f(vboVerts[i][k].x, vboVerts[i][k].y);
-                    float vertexDistance = VertexLocation.distance(particleLocation);
+                    ofVec2f vertexLocation = ofVec2f(vboVerts[i][k].x, vboVerts[i][k].y);
+                    float vertexDistance = vertexLocation.distance(particleLocation);
                     
                     if (vertexDistance < vertexDistanceHolder) {
                         vertexDistanceHolder = vertexDistance;
                         nearestVertex = k;
+                        ofDrawLine(particleLocation.x,particleLocation.y,vertexLocation.x,vertexLocation.y);
                     }
                     
-                    vboColor[i][k] = ofFloatColor(ofFloatColor(ofRandom(1.0),ofRandom(1.0),ofRandom(1.0),1.0));
-                    vboVector[i].updateColorData(&vboColor[i][0], vboVerts[i].size());
+                    
+                    
+                    
+                    
+                    vboColor[i][k] = ofFloatColor(1.0, // Red channel
+                                                  1.0, // Green channel
+                                                  1.0  // Blue channel
+                                                  );
+                    vboVector[i].updateColorData(&vboColor[i][0], vboColor[i].size());
+                    
                 }
             }
         }
