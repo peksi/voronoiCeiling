@@ -32,7 +32,7 @@ public:
     ofParameter<float> velocityLimit;
     ofParameter<float> attractorsForce;
     ofParameter<float> attractorsRadius;
-    ofParameter<bool> spawnParticles,edgeRepel, showParticles,deleteParticles, guiListener;
+    ofParameter<bool> spawnParticles,edgeRepel, showParticles,deleteParticles, guiListener, particleDebug;
     
     ParticleSystem();
 };

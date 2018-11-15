@@ -130,39 +130,41 @@ void ofApp::draw(){
     attractorSystem.displayAttractors();
     
     // Checking system
-    for (int i = 0; i < voronoiCentroids.size(); i++) {
-        for (int j = 0; j < particleSystem.particleVector.size(); j++) {
-            glm::vec2 tempCentroid = voronoiCentroids[i];
-            Particle tempParticle = particleSystem.particleVector[j];
-            
-            ofVec2f centroidLocation = ofVec2f(tempCentroid.x,tempCentroid.y);
-            ofVec2f particleLocation = ofVec2f(tempParticle.location.x,tempParticle.location.y);
-            
-            float centroidDistance = centroidLocation.distance(particleLocation);
-            
-            if (centroidDistance < 50) {
-                int nearestVertex;
-                float vertexDistanceHolder = 50;
-                for (int k = 0; k < vboVerts[i].size(); k++) {
-                    ofVec2f vertexLocation = ofVec2f(vboVerts[i][k].x, vboVerts[i][k].y);
-                    float vertexDistance = vertexLocation.distance(particleLocation);
-                    
-                    if (vertexDistance < vertexDistanceHolder) {
-                        vertexDistanceHolder = vertexDistance;
-                        nearestVertex = k;
-                        ofDrawLine(particleLocation.x,particleLocation.y,vertexLocation.x,vertexLocation.y);
+    if(particleSystem.particleDebug){
+        for (int i = 0; i < voronoiCentroids.size(); i++) {
+            for (int j = 0; j < particleSystem.particleVector.size(); j++) {
+                glm::vec2 tempCentroid = voronoiCentroids[i];
+                Particle tempParticle = particleSystem.particleVector[j];
+                
+                ofVec2f centroidLocation = ofVec2f(tempCentroid.x,tempCentroid.y);
+                ofVec2f particleLocation = ofVec2f(tempParticle.location.x,tempParticle.location.y);
+                
+                float centroidDistance = centroidLocation.distance(particleLocation);
+                
+                if (centroidDistance < 50) {
+                    int nearestVertex;
+                    float vertexDistanceHolder = 50;
+                    for (int k = 0; k < vboVerts[i].size(); k++) {
+                        ofVec2f vertexLocation = ofVec2f(vboVerts[i][k].x, vboVerts[i][k].y);
+                        float vertexDistance = vertexLocation.distance(particleLocation);
+                        
+                        if (vertexDistance < vertexDistanceHolder) {
+                            vertexDistanceHolder = vertexDistance;
+                            nearestVertex = k;
+                            ofDrawLine(particleLocation.x,particleLocation.y,vertexLocation.x,vertexLocation.y);
+                        }
+                        
+                        
+                        
+                        
+                        
+                        vboColor[i][k] = ofFloatColor(1.0, // Red channel
+                                                      1.0, // Green channel
+                                                      1.0  // Blue channel
+                                                      );
+                        vboVector[i].updateColorData(&vboColor[i][0], vboColor[i].size());
+                        
                     }
-                    
-                    
-                    
-                    
-                    
-                    vboColor[i][k] = ofFloatColor(1.0, // Red channel
-                                                  1.0, // Green channel
-                                                  1.0  // Blue channel
-                                                  );
-                    vboVector[i].updateColorData(&vboColor[i][0], vboColor[i].size());
-                    
                 }
             }
         }

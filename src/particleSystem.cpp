@@ -20,6 +20,7 @@ ParticleSystem::ParticleSystem() {
     particleParameters.add(edgeRepel.set("Repel particles from edge",true));
     particleParameters.add(showParticles.set("Display particles",true));
     particleParameters.add(deleteParticles.set("Remove particles by attractor",true));
+    particleParameters.add(particleDebug.set("Debug particles", false));
 }
 void ParticleSystem::addParticles(ofVec2f _attractorCentroid,int _count,float _spawnSpeed) {
     int count; // How many particles per burst are spawned
