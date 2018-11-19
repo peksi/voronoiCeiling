@@ -93,7 +93,7 @@ void ofApp::update(){
     // PARTICLE SYSTEM
     // Timer system to iterate over dispersing attractors
     float currentTime = ofGetElapsedTimef();
-    if (currentTime - lastTime > 2) {
+    if (currentTime - lastTime > 5) {
         attractorSystem.activateAttractor();
         lastTime = currentTime;
     }

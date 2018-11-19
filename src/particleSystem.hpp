@@ -28,6 +28,7 @@ public:
     
     ofParameterGroup particleParameters;
     ofParameter<int> particleCount;
+    ofParameter<int> particleMaxCount;
     ofParameter<float> particleSpawnSpeed;
     ofParameter<float> velocityLimit;
     ofParameter<float> attractorsForce;

@@ -13,6 +13,7 @@ ParticleSystem::ParticleSystem() {
     particleParameters.add(spawnParticles.set("Spawn particles",false));
     particleParameters.add(guiListener.set("Particles listen to GUI controls",false));
     particleParameters.add(particleCount.set("Particle count per emit",1,0,100));
+    particleParameters.add(particleMaxCount.set("Max amount of particles",500,0,1000));
     particleParameters.add(particleSpawnSpeed.set("Particle spawn speed",5,0,50));
     particleParameters.add(velocityLimit.set("Particle velocity limit",5,0,50));
     particleParameters.add(attractorsForce.set("Attractor force",1,0,10));
@@ -36,9 +37,11 @@ void ParticleSystem::addParticles(ofVec2f _attractorCentroid,int _count,float _s
     }
     
     if (spawnParticles == true) {
-        for (int i = 0; i < count; i++) {
-            particleVector.push_back(*new Particle(ofVec2f(_attractorCentroid.x,_attractorCentroid.y)
-                                                   ,spawnSpeed));
+        if (particleVector.size() < particleMaxCount) {
+            for (int i = 0; i < count; i++) {
+                particleVector.push_back(*new Particle(ofVec2f(_attractorCentroid.x,_attractorCentroid.y)
+                                                       ,spawnSpeed));
+            }
         }
     }
     
@@ -105,7 +108,7 @@ void ParticleSystem::attractParticles(ofVec2f _attractorCentroid, float _attract
     }
     
     for (int i = 0; i < particleVector.size(); i++) {
-        particleVector[i].attract(_attractorCentroid,_attractorForce,_attractionRadius);
+        particleVector[i].attract(_attractorCentroid,attractorForce,attractionRadius);
     }
 }
 void ParticleSystem::updateParticles() {

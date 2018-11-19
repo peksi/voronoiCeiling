@@ -39,7 +39,7 @@ void Particle::edgeDetect() {
         if (velocity.y < 0) {
             float distance = location.y;
             float forceStrength = 1 / distance;
-            float pushForceY = velocity.x;
+            float pushForceY = velocity.y;
             pushForceY = pushForceY * -forceStrength;
             applyForce(ofVec2f(0.0,pushForceY));
         }
@@ -48,7 +48,7 @@ void Particle::edgeDetect() {
         if (velocity.y > 0) {
             float distance = ofGetHeight() - location.y;
             float forceStrength = 1 / distance;
-            float pushForceY = velocity.x;
+            float pushForceY = velocity.y;
             pushForceY = pushForceY * -forceStrength;
             applyForce(ofVec2f(0.0,pushForceY));
         }
@@ -80,6 +80,11 @@ void Particle::attract(ofVec2f _attractorCentroid, float _attractorMass,int _att
         force *= strength;
         
         applyForce(force);
+    } else {
+        // This code is to make sure that there is always a force.
+        // this way particles don't get stuck.
+        force.normalize();
+        applyForce(force/1000);
     }
 }
 void Particle::applyForce(ofVec2f _force) {
