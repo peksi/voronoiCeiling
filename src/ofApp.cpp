@@ -142,32 +142,43 @@ void ofApp::draw(){
                 
                 if (centroidDistance < 50) {
                     int nearestVertex;
-                    float vertexDistanceHolder = 50;
+                    float vertexDistanceHolder = 100;
+                    
                     for (int k = 0; k < vboVerts[i].size(); k++) {
                         ofVec2f vertexLocation = ofVec2f(vboVerts[i][k].x, vboVerts[i][k].y);
                         float vertexDistance = vertexLocation.distance(particleLocation);
                         
-//                        if (vertexDistance < vertexDistanceHolder) {
-//                            vertexDistanceHolder = vertexDistance;
-//                            nearestVertex = k;
-//                            ofDrawLine(particleLocation.x,particleLocation.y,vertexLocation.x,vertexLocation.y);
-//                        }
-//
-                        ofFloatColor tempColor = vboColor[i][k];
-                        if(tempColor[0] < 1.){
-                            tempColor[0] += 0.05;
+                        if (vertexDistance < vertexDistanceHolder) {
+                            vertexDistanceHolder = vertexDistance;
+                            nearestVertex = k;
+                            ofDrawLine(particleLocation.x,particleLocation.y,vertexLocation.x,vertexLocation.y);
+                            
+                            ofFloatColor tempColor = vboColor[i][nearestVertex];
+                            // Values are rgb(255,51,255) converted to floatColor (Junction MAGENTA).
+                            float stepSize = 0.05;
+                            if(tempColor[0] < 1.0 - stepSize){
+                                tempColor[0] += stepSize;
+                            }
+                            
+                            if (tempColor[1] <= 0.2 - stepSize) {
+                                tempColor[1] += stepSize;
+                            } else if (tempColor[1] > 0.2 + stepSize) {
+                                tempColor[1] -= stepSize;
+                            }
+                            
+                            if (tempColor[2] < 1.0) {
+                                tempColor[2] += stepSize;
+                            }
+                            
+                            vboColor[i][nearestVertex] = ofFloatColor(
+                                                                      tempColor[0], // Red channel
+                                                                      tempColor[1], // Green channel
+                                                                      tempColor[2]  // Blue channel
+                                                                      );
                         }
-                        
-                        vboColor[i][k] = ofFloatColor(
-                                                      tempColor[0], // Red channel
-                                                      tempColor[1], // Green channel
-                                                      tempColor[2]  // Blue channel
-                                                      );
-                        
-                        
-//                        vboVector[i].updateColorData(&vboColor[i][0], vboColor[i].size());
-                        
                     }
+
+                    
                 }
             }
         }
@@ -177,8 +188,23 @@ void ofApp::draw(){
     for(int i = 0; i < voronoiCentroids.size(); i++){
         for (int j = 0; j < vboVerts[i].size(); j++){
             ofFloatColor tempColor = vboColor[i][j];
-            if(tempColor[0] > 0){
+            float noiseValue = ofNoise(i+ofGetFrameNum()*0.001,j+ofGetFrameNum()*0.001);
+            // Valyes are rgb(0,255,153) converted to floatColor (Junction GREEN);
+            // Values are rgb(53,226,223) converted to floatColor (Junction TURQUOISE);
+            if(tempColor[0] > 0.207 - (0.207 * noiseValue)){
                 tempColor[0] -= 0.01;
+            } else if (tempColor[0] <= 0.207 - (0.207 * noiseValue)) {
+                tempColor[0] += 0.01;
+            }
+            if(tempColor[1] > 0.886 + (0.124 * noiseValue)){
+                tempColor[1] -= 0.01;
+            } else if (tempColor[1] <= 0.886 + (0.124 * noiseValue)) {
+                tempColor[1] += 0.01;
+            }
+            if(tempColor[2] > 0.874 - (0.274 * noiseValue)){
+                tempColor[2] -= 0.01;
+            } else if (tempColor[2] <= 0.874 - (0.274 * noiseValue)) {
+                tempColor[2] += 0.01;
             }
             
             
