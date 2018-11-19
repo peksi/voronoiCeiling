@@ -147,15 +147,15 @@ void ofApp::draw(){
                         ofVec2f vertexLocation = ofVec2f(vboVerts[i][k].x, vboVerts[i][k].y);
                         float vertexDistance = vertexLocation.distance(particleLocation);
                         
-                        if (vertexDistance < vertexDistanceHolder) {
-                            vertexDistanceHolder = vertexDistance;
-                            nearestVertex = k;
-                            ofDrawLine(particleLocation.x,particleLocation.y,vertexLocation.x,vertexLocation.y);
-                        }
-                        
+//                        if (vertexDistance < vertexDistanceHolder) {
+//                            vertexDistanceHolder = vertexDistance;
+//                            nearestVertex = k;
+//                            ofDrawLine(particleLocation.x,particleLocation.y,vertexLocation.x,vertexLocation.y);
+//                        }
+//
                         ofFloatColor tempColor = vboColor[i][k];
                         if(tempColor[0] < 1.){
-                            tempColor[0] += 0.1;
+                            tempColor[0] += 0.05;
                         }
                         
                         vboColor[i][k] = ofFloatColor(
@@ -178,7 +178,7 @@ void ofApp::draw(){
         for (int j = 0; j < vboVerts[i].size(); j++){
             ofFloatColor tempColor = vboColor[i][j];
             if(tempColor[0] > 0){
-                tempColor[0] -= 0.05;
+                tempColor[0] -= 0.01;
             }
             
             
