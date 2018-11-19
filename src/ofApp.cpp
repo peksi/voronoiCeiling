@@ -60,7 +60,7 @@ void ofApp::setup(){
         
         for(int j = 0; j < tempCell.size(); j++){
             tempCell3d.push_back(ofVec3f(tempCell[j].x, tempCell[j].y, 0.0f));
-            tempColorChannels.push_back(ofRandom(1.0));
+            tempColorChannels.push_back(0);
             tempColorChannels.push_back(ofRandom(1.0));
             tempColorChannels.push_back(ofRandom(1.0));
             tempColors.push_back(ofFloatColor(tempColorChannels[j], // Red channel
@@ -73,7 +73,6 @@ void ofApp::setup(){
         vboVerts.push_back(tempCell3d);
         vboFaces.push_back(tempIndices);
         vboColor.push_back(tempColors);
-        vboColorChannels.push_back(tempColorChannels);
     }
     
     for (int i = 0; i < vboVerts.size(); i++) {
@@ -166,11 +165,25 @@ void ofApp::draw(){
                                                       );
                         
                         
-                        vboVector[i].updateColorData(&vboColor[i][0], vboColor[i].size());
+//                        vboVector[i].updateColorData(&vboColor[i][0], vboColor[i].size());
                         
                     }
                 }
             }
+        }
+    }
+    
+    
+    for(int i = 0; i < voronoiCentroids.size(); i++){
+        for (int j = 0; j < vboVerts[i].size(); j++){
+            ofFloatColor tempColor = vboColor[i][j];
+            if(tempColor[0] > 0){
+                tempColor[0] -= 0.05;
+            }
+            
+            
+            vboColor[i][j] = tempColor;
+            vboVector[i].updateColorData(&vboColor[i][0], vboColor[i].size());
         }
     }
     

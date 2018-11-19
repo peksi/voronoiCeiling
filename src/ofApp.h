@@ -41,7 +41,6 @@ public:
     vector<ofVbo> vboVector;
     vector<vector<ofVec3f>> vboVerts;
     vector<vector<ofIndexType>> vboFaces;
-    vector<vector<float>> vboColorChannels;
     vector<vector<ofFloatColor>> vboColor;
     
     // GUI
