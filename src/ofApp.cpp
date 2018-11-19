@@ -154,14 +154,18 @@ void ofApp::draw(){
                             ofDrawLine(particleLocation.x,particleLocation.y,vertexLocation.x,vertexLocation.y);
                         }
                         
+                        ofFloatColor tempColor = vboColor[i][k];
+                        if(tempColor[0] < 1.){
+                            tempColor[0] += 0.1;
+                        }
                         
-                        
-                        
-                        
-                        vboColor[i][k] = ofFloatColor(1.0, // Red channel
-                                                      1.0, // Green channel
-                                                      1.0  // Blue channel
+                        vboColor[i][k] = ofFloatColor(
+                                                      tempColor[0], // Red channel
+                                                      tempColor[1], // Green channel
+                                                      tempColor[2]  // Blue channel
                                                       );
+                        
+                        
                         vboVector[i].updateColorData(&vboColor[i][0], vboColor[i].size());
                         
                     }
