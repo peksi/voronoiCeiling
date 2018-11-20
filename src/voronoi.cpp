@@ -4,6 +4,8 @@ Voronoi::Voronoi() {
     
     voronoiParameters.setName("Voronoi GUI panel");
     voronoiParameters.add(showVoronoi.set("Show voronoi", false));
+    voronoiParameters.add(backgroundColorSet.set("Color voronoi background",false));
+    
     initialized = false;
 }
 
@@ -139,24 +141,49 @@ void Voronoi::draw(){
                             nearestVertex = k;
                             
                             if(particleSystem.particleDebug){
-                                ofDrawLine(particleLocation.x,particleLocation.y,vertexLocation.x,vertexLocation.y);
+                                //ofDrawLine(particleLocation.x,particleLocation.y,vertexLocation.x,vertexLocation.y);
                             }
                             
                             ofFloatColor tempColor = vboColor[i][nearestVertex];
+                            float particleNoiseValue = ofClamp(ofNoise(i+ofGetFrameNum()*0.01,j+ofGetFrameNum()*0.0001),0.5,1);
                             // Values are rgb(255,51,255) converted to floatColor (Junction MAGENTA).
-                            float stepSize = 0.05;
-                            if(tempColor[0] < 1.0 - stepSize){
-                                tempColor[0] += stepSize;
-                            }
-                            
-                            if (tempColor[1] <= 0.2 - stepSize) {
-                                tempColor[1] += stepSize;
-                            } else if (tempColor[1] > 0.2 + stepSize) {
-                                tempColor[1] -= stepSize;
-                            }
-                            
-                            if (tempColor[2] < 1.0) {
-                                tempColor[2] += stepSize;
+                            float stepSize = 0.02;
+                            if (j % 2 == 0) {
+                                if(tempColor[0] <= 1.0 - stepSize * particleNoiseValue){
+                                    tempColor[0] += stepSize;
+                                } else if (tempColor[0] > 1.0 + stepSize * particleNoiseValue) {
+                                    tempColor[0] -= stepSize;
+                                }
+                                
+                                if (tempColor[1] <= 0.2 - stepSize * particleNoiseValue) {
+                                    tempColor[1] += stepSize;
+                                } else if (tempColor[1] > 0.2 + stepSize * particleNoiseValue) {
+                                    tempColor[1] -= stepSize;
+                                }
+                                
+                                if (tempColor[2] <= 1.0 - stepSize * particleNoiseValue) {
+                                    tempColor[2] += stepSize;
+                                } else if (tempColor[2] > 1.0 + stepSize * particleNoiseValue) {
+                                    tempColor[2] -= stepSize;
+                                }
+                            } else {
+                                if(tempColor[0] <= 0.207 - stepSize * particleNoiseValue){
+                                    tempColor[0] += stepSize;
+                                } else if (tempColor[0] > 0.207 + stepSize * particleNoiseValue) {
+                                    tempColor[0] -= stepSize;
+                                }
+                                
+                                if (tempColor[1] <= 0.886 - stepSize * particleNoiseValue) {
+                                    tempColor[1] += stepSize;
+                                } else if (tempColor[1] > 0.886 + stepSize * particleNoiseValue) {
+                                    tempColor[1] -= stepSize;
+                                }
+                                
+                                if (tempColor[2] <= 0.874 - stepSize * particleNoiseValue) {
+                                    tempColor[2] += stepSize;
+                                } else if (tempColor[2] > 0.874 + stepSize * particleNoiseValue) {
+                                    tempColor[2] -= stepSize;
+                                }
                             }
                             
                             vboColor[i][nearestVertex] = ofFloatColor(
@@ -177,28 +204,44 @@ void Voronoi::draw(){
     for(int i = 0; i < voronoiCentroids.size(); i++){
         for (int j = 0; j < vboVerts[i].size(); j++){
             ofFloatColor tempColor = vboColor[i][j];
-            float noiseValue = ofNoise(i+ofGetFrameNum()*0.001,j+ofGetFrameNum()*0.001);
+            float noiseValue = ofClamp(ofNoise(i+ofGetFrameNum()*0.01,j+ofGetFrameNum()*0.0001),0.9,1);
+            float fadeSpeed = 0.01;
             // Valyes are rgb(0,255,153) converted to floatColor (Junction GREEN);
             // Values are rgb(53,226,223) converted to floatColor (Junction TURQUOISE);
-            if(tempColor[0] > 0.207 - (0.207 * noiseValue)){
-                tempColor[0] -= 0.01;
-            } else if (tempColor[0] <= 0.207 - (0.207 * noiseValue)) {
-                tempColor[0] += 0.01;
+            if (backgroundColorSet) {
+                if((tempColor[0] > 0.207 + fadeSpeed) * noiseValue){
+                    tempColor[0] -= 0.01;
+                } else if ((tempColor[0] <= 0.207 - fadeSpeed) * noiseValue) {
+                    tempColor[0] += 0.01;
+                }
+                if((tempColor[1] > 0.886 + fadeSpeed) * noiseValue){
+                    tempColor[1] -= 0.01;
+                } else if ((tempColor[1] <= 0.886 - fadeSpeed)* noiseValue) {
+                    tempColor[1] += 0.01;
+                }
+                if((tempColor[2] > 0.874 + fadeSpeed)* noiseValue){
+                    tempColor[2] -= 0.01;
+                } else if ((tempColor[2] <= 0.874 - fadeSpeed)* noiseValue) {
+                    tempColor[2] += 0.01;
+                }
+            } else {
+                if (tempColor[0] > 0.0) {
+                    tempColor[0] -= 0.01;
+                }
+                if (tempColor[1] > 0.0) {
+                    tempColor[1] -= 0.01;
+                }
+                if (tempColor[2] > 0.0) {
+                    tempColor[2] -= 0.01;
+                }
+                
             }
-            if(tempColor[1] > 0.886 + (0.124 * noiseValue)){
-                tempColor[1] -= 0.01;
-            } else if (tempColor[1] <= 0.886 + (0.124 * noiseValue)) {
-                tempColor[1] += 0.01;
-            }
-            if(tempColor[2] > 0.874 - (0.274 * noiseValue)){
-                tempColor[2] -= 0.01;
-            } else if (tempColor[2] <= 0.874 - (0.274 * noiseValue)) {
-                tempColor[2] += 0.01;
-            }
+            
             
             
             vboColor[i][j] = tempColor;
             vboVector[i].updateColorData(&vboColor[i][0], vboColor[i].size());
+        
         }
     }
     

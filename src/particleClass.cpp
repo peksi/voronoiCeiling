@@ -66,6 +66,20 @@ void Particle::edgeDetect() {
     if (location.y > ofGetHeight()) {
         location.y = ofGetHeight();
     }
+    
+    // Kill particle if accidental leave
+    if (location.x < 0-100) {
+        isDead = true;
+    }
+    if (location.x > ofGetWidth() + 100) {
+         isDead = true;
+    }
+    if (location.y < 0 - 100) {
+         isDead = true;
+    }
+    if (location.y > ofGetHeight() + 100) {
+         isDead = true;
+    }
 }
 void Particle::attract(ofVec2f _attractorCentroid, float _attractorMass,int _attractionRadius) {
     ofVec2f force = _attractorCentroid - location;
