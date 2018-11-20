@@ -72,7 +72,7 @@ void ofApp::draw(){
     ofBackground(0);
     
     if(voronoi.initialized && voronoi.showVoronoi){
-        voronoi.draw();
+        voronoi.draw(edgeLine);
     }
     
     // voronoi edge line

@@ -8,7 +8,7 @@ class Voronoi {
 public:
     void initialize(ofPolyline bounds);
     bool initialized;
-    void draw();
+    void draw(ofPolyline bounds);
     
     // ParticleSystem
     ParticleSystem particleSystem;

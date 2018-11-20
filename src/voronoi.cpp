@@ -7,6 +7,7 @@ Voronoi::Voronoi() {
     voronoiParameters.add(backgroundColorSet.set("Color voronoi background",false));
     
     initialized = false;
+    
 }
 
 void Voronoi::initialize(ofPolyline bounds){
@@ -47,10 +48,10 @@ void Voronoi::initialize(ofPolyline bounds){
     }
     
     relaxedVoronoi.setBounds(ofRectangle(
-                                         minX,
-                                         minY,
-                                         maxX-minX,
-                                         maxY-minY
+                                         minX-50,
+                                         minY-50,
+                                         maxX-minX+100,
+                                         maxY-minY+100
                                          ));
     relaxedVoronoi.setPoints(_points);
     relaxedVoronoi.generate();
@@ -104,7 +105,7 @@ void Voronoi::initialize(ofPolyline bounds){
     }
 }
 
-void Voronoi::draw(){
+void Voronoi::draw(ofPolyline bounds){
     
     // VBO
     for (int i = 0; i < vboVector.size();i++) {
@@ -186,11 +187,19 @@ void Voronoi::draw(){
                                 }
                             }
                             
-                            vboColor[i][nearestVertex] = ofFloatColor(
-                                                                      tempColor[0], // Red channel
-                                                                      tempColor[1], // Green channel
-                                                                      tempColor[2]  // Blue channel
-                                                                      );
+                            
+                            if(bounds.inside(tempCentroid.x,tempCentroid.y)){
+                                vboColor[i][nearestVertex] = ofFloatColor(
+                                                                          tempColor[0], // Red channel
+                                                                          tempColor[1], // Green channel
+                                                                          tempColor[2]  // Blue channel
+                                                                          );
+                            } else {
+                                vboColor[i][nearestVertex] = ofFloatColor(0,0,0);
+                                
+                            }
+                            
+
                         }
                     }
                     
