@@ -96,66 +96,65 @@ void Voronoi::draw(){
                         ofVec2f vertexLocation = ofVec2f(vboVerts[i][k].x, vboVerts[i][k].y);
                         float vertexDistance = vertexLocation.distance(particleLocation);
                         
-                        if (vertexDistance < vertexDistanceHolder) {
-                            vertexDistanceHolder = vertexDistance;
-                            nearestVertex = k;
-                            
+                        if (vertexDistance < 50) {
                             if(particleSystem.particleDebug){
-                                //ofDrawLine(particleLocation.x,particleLocation.y,vertexLocation.x,vertexLocation.y);
+                                ofDrawLine(particleLocation.x,particleLocation.y,
+                                           vertexLocation.x,vertexLocation.y);
                             }
                             
-                            ofFloatColor tempColor = vboColor[i][nearestVertex];
-                            float particleNoiseValue = ofClamp(ofNoise(i+ofGetFrameNum()*0.01,j+ofGetFrameNum()*0.0001),0.5,1);
-                            // Values are rgb(255,51,255) converted to floatColor (Junction MAGENTA).
+                            ofFloatColor tempColor = vboColor[i][k];
+                            float particleNoiseValue = ofClamp(ofNoise(i+ofGetFrameNum()*0.01,
+                                                                       j+ofGetFrameNum()*0.0001)
+                                                               ,0.5,1);
+                            
+                            // Values are rgb(255,51,255)converted to floatColor (Junction MAGENTA).
                             float stepSize = 0.02;
                             if (j % 2 == 0) {
-                                if(tempColor[0] <= 1.0 - stepSize * particleNoiseValue){
+                                if((tempColor[0] <= 1.0 - stepSize) * particleNoiseValue){
                                     tempColor[0] += stepSize;
-                                } else if (tempColor[0] > 1.0 + stepSize * particleNoiseValue) {
+                                } else if ((tempColor[0] > 1.0 + stepSize) * particleNoiseValue) {
                                     tempColor[0] -= stepSize;
                                 }
                                 
-                                if (tempColor[1] <= 0.2 - stepSize * particleNoiseValue) {
+                                if ((tempColor[1] <= 0.2 - stepSize) * particleNoiseValue) {
                                     tempColor[1] += stepSize;
-                                } else if (tempColor[1] > 0.2 + stepSize * particleNoiseValue) {
+                                } else if ((tempColor[1] > 0.2 + stepSize) * particleNoiseValue) {
                                     tempColor[1] -= stepSize;
                                 }
                                 
-                                if (tempColor[2] <= 1.0 - stepSize * particleNoiseValue) {
+                                if ((tempColor[2] <= 1.0 - stepSize) * particleNoiseValue) {
                                     tempColor[2] += stepSize;
-                                } else if (tempColor[2] > 1.0 + stepSize * particleNoiseValue) {
+                                } else if ((tempColor[2] > 1.0 + stepSize) * particleNoiseValue) {
                                     tempColor[2] -= stepSize;
                                 }
                             } else {
-                                if(tempColor[0] <= 0.207 - stepSize * particleNoiseValue){
+                                if((tempColor[0] <= 0.207 - stepSize) * particleNoiseValue){
                                     tempColor[0] += stepSize;
-                                } else if (tempColor[0] > 0.207 + stepSize * particleNoiseValue) {
+                                } else if ((tempColor[0] > 0.207 + stepSize) * particleNoiseValue) {
                                     tempColor[0] -= stepSize;
                                 }
                                 
-                                if (tempColor[1] <= 0.886 - stepSize * particleNoiseValue) {
+                                if ((tempColor[1] <= 0.886 - stepSize) * particleNoiseValue) {
                                     tempColor[1] += stepSize;
-                                } else if (tempColor[1] > 0.886 + stepSize * particleNoiseValue) {
+                                } else if ((tempColor[1] > 0.886 + stepSize) * particleNoiseValue) {
                                     tempColor[1] -= stepSize;
                                 }
                                 
-                                if (tempColor[2] <= 0.874 - stepSize * particleNoiseValue) {
+                                if ((tempColor[2] <= 0.874 - stepSize) * particleNoiseValue) {
                                     tempColor[2] += stepSize;
-                                } else if (tempColor[2] > 0.874 + stepSize * particleNoiseValue) {
+                                } else if ((tempColor[2] > 0.874 + stepSize) * particleNoiseValue) {
                                     tempColor[2] -= stepSize;
                                 }
                             }
                             
-                            vboColor[i][nearestVertex] = ofFloatColor(
+                            vboColor[i][k] = ofFloatColor(
                                                                       tempColor[0], // Red channel
                                                                       tempColor[1], // Green channel
                                                                       tempColor[2]  // Blue channel
                                                                       );
-                        }
-                    }
-                    
-                    
-                }
+                        } // End of (vertexDistance < 50);
+                    } // End of checking Vertexes to particle locations
+                } // End of checking Centroids to particle locations
             }
         }
     }
