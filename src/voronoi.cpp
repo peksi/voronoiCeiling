@@ -188,16 +188,12 @@ void Voronoi::draw(ofPolyline bounds){
                             }
                             
                             
-                            if(bounds.inside(tempCentroid.x,tempCentroid.y)){
+
                                 vboColor[i][k] = ofFloatColor(
                                                                           tempColor[0], // Red channel
                                                                           tempColor[1], // Green channel
                                                                           tempColor[2]  // Blue channel
                                                                           );
-                            } else {
-                                vboColor[i][k] = ofFloatColor(0,0,0);
-                                
-                            }
 
                         } // End of (vertexDistance < 50);
                     } // End of checking Vertexes to particle locations
@@ -215,38 +211,43 @@ void Voronoi::draw(ofPolyline bounds){
             float fadeSpeed = 0.01;
             // Valyes are rgb(0,255,153) converted to floatColor (Junction GREEN);
             // Values are rgb(53,226,223) converted to floatColor (Junction TURQUOISE);
-            if (backgroundColorSet) {
-                if((tempColor[0] > 0.207 + fadeSpeed) * noiseValue){
-                    tempColor[0] -= 0.01;
-                } else if ((tempColor[0] <= 0.207 - fadeSpeed) * noiseValue) {
-                    tempColor[0] += 0.01;
-                }
-                if((tempColor[1] > 0.886 + fadeSpeed) * noiseValue){
-                    tempColor[1] -= 0.01;
-                } else if ((tempColor[1] <= 0.886 - fadeSpeed)* noiseValue) {
-                    tempColor[1] += 0.01;
-                }
-                if((tempColor[2] > 0.874 + fadeSpeed)* noiseValue){
-                    tempColor[2] -= 0.01;
-                } else if ((tempColor[2] <= 0.874 - fadeSpeed)* noiseValue) {
-                    tempColor[2] += 0.01;
-                }
-            } else {
-                if (tempColor[0] > 0.0) {
-                    tempColor[0] -= 0.01;
-                }
-                if (tempColor[1] > 0.0) {
-                    tempColor[1] -= 0.01;
-                }
-                if (tempColor[2] > 0.0) {
-                    tempColor[2] -= 0.01;
-                }
+            
+            if(!bounds.inside(vboVerts[i][j].x, vboVerts[i][j].y)){ // if we're out of bounds draw black
                 
+                vboColor[i][j] = ofFloatColor(0,0,0);
+                
+            } else { // otherwise let's do the junction magic
+                
+                if (backgroundColorSet) {
+                    if((tempColor[0] > 0.207 + fadeSpeed) * noiseValue){
+                        tempColor[0] -= 0.01;
+                    } else if ((tempColor[0] <= 0.207 - fadeSpeed) * noiseValue) {
+                        tempColor[0] += 0.01;
+                    }
+                    if((tempColor[1] > 0.886 + fadeSpeed) * noiseValue){
+                        tempColor[1] -= 0.01;
+                    } else if ((tempColor[1] <= 0.886 - fadeSpeed)* noiseValue) {
+                        tempColor[1] += 0.01;
+                    }
+                    if((tempColor[2] > 0.874 + fadeSpeed)* noiseValue){
+                        tempColor[2] -= 0.01;
+                    } else if ((tempColor[2] <= 0.874 - fadeSpeed)* noiseValue) {
+                        tempColor[2] += 0.01;
+                    }
+                } else {
+                    if (tempColor[0] > 0.0) {
+                        tempColor[0] -= 0.01;
+                    }
+                    if (tempColor[1] > 0.0) {
+                        tempColor[1] -= 0.01;
+                    }
+                    if (tempColor[2] > 0.0) {
+                        tempColor[2] -= 0.01;
+                    }
+                }
+                vboColor[i][j] = tempColor;
             }
             
-            
-            
-            vboColor[i][j] = tempColor;
             vboVector[i].updateColorData(&vboColor[i][0], vboColor[i].size());
         
         }
