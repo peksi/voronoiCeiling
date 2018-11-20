@@ -14,74 +14,31 @@ void ofApp::setup(){
     lastTime = ofGetElapsedTimef();
     
     // GUI setup
-    particleGroup.add(particleSystem.particleParameters);
+    particleGroup.add(voronoi.particleSystem.particleParameters);
     particleGui.setup("Particle GUI panel");
     particleGui.setDefaultWidth(int(ofGetWidth()/4));
     particleGui.setup(particleGroup);
     
-    attractorGroup.add(attractorSystem.attractorParameters);
+    attractorGroup.add(voronoi.attractorSystem.attractorParameters);
     attractorGui.setup("Attractor GUI panel");
     attractorGui.setDefaultWidth(int(ofGetWidth()/4));
     attractorGui.setup(attractorGroup);
     attractorGui.setPosition(particleGui.getPosition().x,
                              particleGui.getPosition().y+particleGui.getHeight() + 20);
     
-    // Voronoi setup. Might go elsewhere
+    voronoiGroup.add(voronoi.voronoiParameters);
+    voronoiGui.setup("Voronoi GUI panel");
+    voronoiGui.setDefaultWidth(int(ofGetWidth()/4));
+    voronoiGui.setup(voronoiGroup);
+    voronoiGui.setPosition(attractorGui.getPosition().x,
+                             attractorGui.getPosition().y+attractorGui.getHeight() + 20);
     
-    //  Add the cell seed to the container
-    int nCells = 300;
-    vector<glm::vec2> _points;
-    for(int i = 0; i < nCells;i++){
-        glm::vec2 newPoint = glm::vec2(ofRandom(0,ofGetWidth()), ofRandom(0,ofGetHeight()));
-        
-        _points.push_back(newPoint);
-    }
+    edgeLineFlag = true;
     
-    relaxedVoronoi.setBounds(ofRectangle(0,0,ofGetWidth(), ofGetHeight()));
-    relaxedVoronoi.setPoints(_points);
-    relaxedVoronoi.generate();
-    
-    voronoiCentroids = relaxedVoronoi.getPoints();
-    
-    int relaxIterations = 10;
-    while(relaxIterations--){
-        relaxedVoronoi.relax();
-    }
-    
-    // VBO construction
-    vector<ofxVoronoiCell> tempCells = relaxedVoronoi.getCells();
-    for (int i = 0; i < tempCells.size() ; i++) {
-        vector<glm::vec2> tempCell = tempCells[i].pts;
-        
-        vector<ofVec3f> tempCell3d;
-        vector<ofIndexType> tempIndices;
-        vector<float> tempColorChannels;
-        vector<ofFloatColor> tempColors;
-        
-        for(int j = 0; j < tempCell.size(); j++){
-            tempCell3d.push_back(ofVec3f(tempCell[j].x, tempCell[j].y, 0.0f));
-            tempColorChannels.push_back(0);
-            tempColorChannels.push_back(ofRandom(1.0));
-            tempColorChannels.push_back(ofRandom(1.0));
-            tempColors.push_back(ofFloatColor(tempColorChannels[j], // Red channel
-                                              tempColorChannels[j+1], // Green channel
-                                              tempColorChannels[j+2]  // Blue channel
-                                              ));
-            tempIndices.push_back(j);
-        }
-        
-        vboVerts.push_back(tempCell3d);
-        vboFaces.push_back(tempIndices);
-        vboColor.push_back(tempColors);
-    }
-    
-    for (int i = 0; i < vboVerts.size(); i++) {
-        vboVector.push_back(*new ofVbo); // Free up slot for this VBO
-        vboVector[i].setVertexData( &vboVerts[i][0], vboVerts[i].size(), GL_STATIC_DRAW );
-        vboVector[i].setIndexData( &vboFaces[i][0], vboVerts[i].size(), GL_STATIC_DRAW );
-        vboVector[i].setColorData( &vboColor[i][0], vboVerts[i].size(), GL_DYNAMIC_DRAW );
-    }
-    
+    // mockup bounds for now
+    // todo: initialize voronoi after bounds are created and move this function to elsewhere
+    glm::vec2 bounds = glm::vec2(ofRandom(0,ofGetWidth()), ofRandom(0,ofGetHeight()));
+    voronoi.initialize(bounds);
 }
 
 //--------------------------------------------------------------
@@ -93,130 +50,42 @@ void ofApp::update(){
     // Timer system to iterate over dispersing attractors
     float currentTime = ofGetElapsedTimef();
     if (currentTime - lastTime > 5) {
-        attractorSystem.activateAttractor();
+        voronoi.attractorSystem.activateAttractor();
         lastTime = currentTime;
     }
     
     // For loop needed for functions that check [particle <-> attractor] relations.
-    for (int i = 0; i < attractorSystem.attractorVector.size(); i++) {
-        if (attractorSystem.attractorVector[i].active == false) {
-            particleSystem.addParticles(attractorSystem.attractorVector[i].attractorCentroid,
+    for (int i = 0; i < voronoi.attractorSystem.attractorVector.size(); i++) {
+        if (voronoi.attractorSystem.attractorVector[i].active == false) {
+            voronoi.particleSystem.addParticles(voronoi.attractorSystem.attractorVector[i].attractorCentroid,
                                         1, 5);
         }
-        if (attractorSystem.attractorVector[i].active == true) {
-            particleSystem.checkLocation(attractorSystem.attractorVector[i].attractorPoly);
-            particleSystem.attractParticles(attractorSystem.attractorVector[i].attractorCentroid,
-                                            attractorSystem.attractorVector[i].attractorMass,
+        if (voronoi.attractorSystem.attractorVector[i].active == true) {
+            voronoi.particleSystem.checkLocation(voronoi.attractorSystem.attractorVector[i].attractorPoly);
+            voronoi.particleSystem.attractParticles(voronoi.attractorSystem.attractorVector[i].attractorCentroid,
+                                            voronoi.attractorSystem.attractorVector[i].attractorMass,
                                             1000);
         }
     }
-    particleSystem.edgeDetect();
-    particleSystem.updateParticles();
+    voronoi.particleSystem.edgeDetect();
+    voronoi.particleSystem.updateParticles();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground(255);
     
-    // VBO
-    for (int i = 0; i < vboVector.size();i++) {
-        glPointSize(10.f);
-        vboVector[i].drawElements(GL_POLYGON, vboVerts[i].size()); // placeholder values
-    }
     
-    // particle system
-    particleSystem.displayParticles();
-    attractorSystem.displayAttractors();
+    voronoi.draw();
     
-    // Checking system
-    if(particleSystem.particleDebug){
-        for (int i = 0; i < voronoiCentroids.size(); i++) {
-            for (int j = 0; j < particleSystem.particleVector.size(); j++) {
-                glm::vec2 tempCentroid = voronoiCentroids[i];
-                Particle tempParticle = particleSystem.particleVector[j];
-                
-                ofVec2f centroidLocation = ofVec2f(tempCentroid.x,tempCentroid.y);
-                ofVec2f particleLocation = ofVec2f(tempParticle.location.x,tempParticle.location.y);
-                
-                float centroidDistance = centroidLocation.distance(particleLocation);
-                
-                if (centroidDistance < 50) {
-                    int nearestVertex;
-                    float vertexDistanceHolder = 100;
-                    
-                    for (int k = 0; k < vboVerts[i].size(); k++) {
-                        ofVec2f vertexLocation = ofVec2f(vboVerts[i][k].x, vboVerts[i][k].y);
-                        float vertexDistance = vertexLocation.distance(particleLocation);
-                        
-                        if (vertexDistance < vertexDistanceHolder) {
-                            vertexDistanceHolder = vertexDistance;
-                            nearestVertex = k;
-                            ofDrawLine(particleLocation.x,particleLocation.y,vertexLocation.x,vertexLocation.y);
-                            
-                            ofFloatColor tempColor = vboColor[i][nearestVertex];
-                            // Values are rgb(255,51,255) converted to floatColor (Junction MAGENTA).
-                            float stepSize = 0.05;
-                            if(tempColor[0] < 1.0 - stepSize){
-                                tempColor[0] += stepSize;
-                            }
-                            
-                            if (tempColor[1] <= 0.2 - stepSize) {
-                                tempColor[1] += stepSize;
-                            } else if (tempColor[1] > 0.2 + stepSize) {
-                                tempColor[1] -= stepSize;
-                            }
-                            
-                            if (tempColor[2] < 1.0) {
-                                tempColor[2] += stepSize;
-                            }
-                            
-                            vboColor[i][nearestVertex] = ofFloatColor(
-                                                                      tempColor[0], // Red channel
-                                                                      tempColor[1], // Green channel
-                                                                      tempColor[2]  // Blue channel
-                                                                      );
-                        }
-                    }
-
-                    
-                }
-            }
-        }
-    }
-    
-    
-    for(int i = 0; i < voronoiCentroids.size(); i++){
-        for (int j = 0; j < vboVerts[i].size(); j++){
-            ofFloatColor tempColor = vboColor[i][j];
-            float noiseValue = ofNoise(i+ofGetFrameNum()*0.001,j+ofGetFrameNum()*0.001);
-            // Valyes are rgb(0,255,153) converted to floatColor (Junction GREEN);
-            // Values are rgb(53,226,223) converted to floatColor (Junction TURQUOISE);
-            if(tempColor[0] > 0.207 - (0.207 * noiseValue)){
-                tempColor[0] -= 0.01;
-            } else if (tempColor[0] <= 0.207 - (0.207 * noiseValue)) {
-                tempColor[0] += 0.01;
-            }
-            if(tempColor[1] > 0.886 + (0.124 * noiseValue)){
-                tempColor[1] -= 0.01;
-            } else if (tempColor[1] <= 0.886 + (0.124 * noiseValue)) {
-                tempColor[1] += 0.01;
-            }
-            if(tempColor[2] > 0.874 - (0.274 * noiseValue)){
-                tempColor[2] -= 0.01;
-            } else if (tempColor[2] <= 0.874 - (0.274 * noiseValue)) {
-                tempColor[2] += 0.01;
-            }
-            
-            
-            vboColor[i][j] = tempColor;
-            vboVector[i].updateColorData(&vboColor[i][0], vboColor[i].size());
-        }
-    }
+    // voronoi edge line
+    edgeLine.draw();
     
     // gui
     if(!guiHide){
         particleGui.draw();
         attractorGui.draw();
+        voronoiGui.draw();
     }
 }
 
@@ -226,8 +95,13 @@ void ofApp::keyPressed(int key){
         ofToggleFullscreen();
     } else if ( key == 'h'){ // hide gui
         guiHide = !guiHide;
-    } else if (key == 'p') {
-        attractorSystem.createAttractor();
+    } else if (key == 'p') { // create particle attractor
+        voronoi.attractorSystem.createAttractor();
+    } else if (key == 'l'){ // toggle edgeline
+        edgeLineFlag = !edgeLineFlag;
+        cout << "edgeLineFlag toggled \n";
+        cout << edgeLineFlag;
+        cout << '\n';
     }
 }
 
@@ -243,7 +117,7 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-    attractorSystem.moveAttractorPoints();
+    voronoi.attractorSystem.moveAttractorPoints();
 }
 
 //--------------------------------------------------------------
@@ -253,7 +127,14 @@ void ofApp::mousePressed(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-    attractorSystem.setAttractor();
+    if(edgeLineFlag){
+        ofPoint pt;
+        pt.set(x, y);
+        edgeLine.addVertex(pt);
+    } else {
+        voronoi.attractorSystem.setAttractor();
+    }
+    
 }
 
 //--------------------------------------------------------------

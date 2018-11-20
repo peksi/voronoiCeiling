@@ -6,8 +6,10 @@
 #include "particleSystem.hpp"
 #include "attractorSystem.hpp"
 #include "attractorClass.hpp"
+#include "voronoi.hpp"
 
-#include "ofxVoronoi.h"
+
+
 
 class ofApp : public ofBaseApp{
 public:
@@ -31,17 +33,13 @@ public:
     
     // Public variables
     float lastTime;
-
-    // ParticleSystem
-    ParticleSystem particleSystem;
-    // AttractorSystem
-    AttractorSystem attractorSystem;
     
-    // VBO
-    vector<ofVbo> vboVector;
-    vector<vector<ofVec3f>> vboVerts;
-    vector<vector<ofIndexType>> vboFaces;
-    vector<vector<ofFloatColor>> vboColor;
+    Voronoi voronoi;
+    
+    // voronoi edge line
+    
+    ofPolyline edgeLine;
+    bool edgeLineFlag;
     
     // GUI
     ofxPanel particleGui, attractorGui, voronoiGui;
@@ -49,9 +47,5 @@ public:
     ofParameterGroup attractorGroup;
     ofParameterGroup voronoiGroup;
     
-    // Voronoi
-    ofxVoronoi relaxedVoronoi;
-    //vector<ofPolyline> voronois;
-    vector<glm::vec2> voronoiCentroids;
-    //vector<ofxVoronoiCell> vertices; // returns glm::vec2 vector
+    
 };
