@@ -76,7 +76,9 @@ void ofApp::draw(){
     }
     
     // voronoi edge line
-    edgeLine.draw();
+    if(voronoi.attractorSystem.showAttractorEdge){
+        edgeLine.draw();
+    }
     
     // gui
     if(!guiHide){
