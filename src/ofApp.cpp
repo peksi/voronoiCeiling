@@ -35,10 +35,6 @@ void ofApp::setup(){
     
     edgeLineFlag = true;
     
-    // mockup bounds for now
-    // todo: initialize voronoi after bounds are created and move this function to elsewhere
-    glm::vec2 bounds = glm::vec2(ofRandom(0,ofGetWidth()), ofRandom(0,ofGetHeight()));
-    voronoi.initialize(bounds);
 }
 
 //--------------------------------------------------------------
@@ -73,10 +69,11 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackground(255);
+    ofBackground(0);
     
-    
-    voronoi.draw();
+    if(voronoi.initialized && voronoi.showVoronoi){
+        voronoi.draw();
+    }
     
     // voronoi edge line
     edgeLine.draw();
@@ -97,11 +94,17 @@ void ofApp::keyPressed(int key){
         guiHide = !guiHide;
     } else if (key == 'p') { // create particle attractor
         voronoi.attractorSystem.createAttractor();
-    } else if (key == 'l'){ // toggle edgeline
-        edgeLineFlag = !edgeLineFlag;
-        cout << "edgeLineFlag toggled \n";
-        cout << edgeLineFlag;
-        cout << '\n';
+    } else if (key == 'l'){ // toggle edgeline and make it complete
+        if(edgeLineFlag && edgeLine.getVertices().size() > 0){
+            edgeLine.addVertex(edgeLine.getVertices()[0]);
+            
+            // and initialize the voronoi inside the blob
+            voronoi.initialize(edgeLine);
+            
+        } else { // if there is no blob just continue
+            edgeLineFlag = !edgeLineFlag;
+            cout << "no edgeBlob \n";
+        }
     }
 }
 
@@ -127,7 +130,7 @@ void ofApp::mousePressed(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-    if(edgeLineFlag){
+    if( !voronoi.initialized) {
         ofPoint pt;
         pt.set(x, y);
         edgeLine.addVertex(pt);

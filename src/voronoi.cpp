@@ -4,19 +4,52 @@ Voronoi::Voronoi() {
     
     voronoiParameters.setName("Voronoi GUI panel");
     voronoiParameters.add(showVoronoi.set("Show voronoi", false));
+    initialized = false;
 }
 
-void Voronoi::initialize(glm::vec2 bounds){
+void Voronoi::initialize(ofPolyline bounds){
+    initialized = true;
+    
+    int minX = ofGetWidth();
+    int minY = ofGetHeight();
+    int maxX = 0;
+    int maxY = 0;
+    
+    for(int i = 0; i < bounds.getVertices().size(); i++){
+        // x
+        if(bounds[i][0] < minX){
+            minX = bounds[i][0];
+        }
+        
+        if(maxX < bounds[i][0]){
+            maxX = bounds[i][0];
+        }
+        
+        // y
+        if(bounds[i][1] < minY){
+            minY = bounds[i][1];
+        }
+        
+        if(maxY < bounds[i][1]){
+            maxY = bounds[i][1];
+        }
+    }
+    
     //  Add the cell seed to the container
     int nCells = 700;
     vector<glm::vec2> _points;
     for(int i = 0; i < nCells;i++){
-        glm::vec2 newPoint = glm::vec2(ofRandom(0,ofGetWidth()), ofRandom(0,ofGetHeight()));
+        glm::vec2 newPoint = glm::vec2(ofRandom(minX,maxX), ofRandom(minY,maxY));
         
         _points.push_back(newPoint);
     }
     
-    relaxedVoronoi.setBounds(ofRectangle(0,0,ofGetWidth(), ofGetHeight()));
+    relaxedVoronoi.setBounds(ofRectangle(
+                                         minX,
+                                         minY,
+                                         maxX-minX,
+                                         maxY-minY
+                                         ));
     relaxedVoronoi.setPoints(_points);
     relaxedVoronoi.generate();
     
@@ -42,10 +75,17 @@ void Voronoi::initialize(glm::vec2 bounds){
             tempColorChannels.push_back(0);
             tempColorChannels.push_back(ofRandom(1.0));
             tempColorChannels.push_back(ofRandom(1.0));
-            tempColors.push_back(ofFloatColor(tempColorChannels[j], // Red channel
-                                              tempColorChannels[j+1], // Green channel
-                                              tempColorChannels[j+2]  // Blue channel
-                                              ));
+            
+            if(bounds.inside(tempCell[j].x, tempCell[j].y)){
+                tempColors.push_back(ofFloatColor(tempColorChannels[j], // Red channel
+                                                  tempColorChannels[j+1], // Green channel
+                                                  tempColorChannels[j+2]  // Blue channel
+                                                  ));
+            } else {
+                tempColors.push_back(ofFloatColor(0,0,0));
+            }
+            
+
             tempIndices.push_back(j);
         }
         
@@ -64,7 +104,6 @@ void Voronoi::initialize(glm::vec2 bounds){
 
 void Voronoi::draw(){
     
-    if (!showVoronoi) return;
     // VBO
     for (int i = 0; i < vboVector.size();i++) {
         glPointSize(10.f);
