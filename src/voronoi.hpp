@@ -6,7 +6,8 @@
 
 class Voronoi {
 public:
-    void initialize(glm::vec2 bounds);
+    void initialize(ofPolyline bounds);
+    bool initialized;
     void draw();
     
     // ParticleSystem
