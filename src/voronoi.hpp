@@ -18,6 +18,7 @@ public:
     // gui parameters
     ofParameterGroup voronoiParameters;
     ofParameter<bool> showVoronoi;
+    ofParameter<bool> backgroundColorSet;
     
     // VBO
     vector<ofVbo> vboVector;

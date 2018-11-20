@@ -73,7 +73,7 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackground(255);
+    ofBackground(0);
     
     
     voronoi.draw();
