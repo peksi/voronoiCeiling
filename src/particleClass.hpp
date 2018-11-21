@@ -26,6 +26,7 @@ public:
     bool isDead;
     
     ofColor particleColor;
+    bool particleColorChoice;
     float particleMass;
     
     Particle(ofVec2f _location, float _spawnSpeed);
