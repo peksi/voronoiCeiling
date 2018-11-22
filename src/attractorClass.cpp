@@ -75,10 +75,10 @@ void Attractor::display(bool _showEdge, bool _showPoints, bool _showFill) {
     for (int i = 0; i < cornerPoints.size(); i++) {
         if (cornerState[i] == true) {
             // Color when set
-            ofSetColor(0, 255, 0,50);
+            ofSetColor(0,255,0);
         } else {
             // Color when being editted
-            ofSetColor(0, 0, 255,50);
+            ofSetColor(255, 0, 0,50);
         }
         if (_showPoints == true) {
             // Draw cornerpoints
@@ -87,10 +87,12 @@ void Attractor::display(bool _showEdge, bool _showPoints, bool _showFill) {
     }
     if (_showFill == true) {
         // Draws fill
+        ofSetColor(0);
         attractorShape.draw();
     }
     if (_showEdge == true) {
         // Draws outline
+        ofSetColor(0,255,0);
         attractorPoly.draw();
     }
 }

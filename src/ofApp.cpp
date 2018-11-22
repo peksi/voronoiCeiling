@@ -77,6 +77,8 @@ void ofApp::draw(){
     
     // voronoi edge line
     if(voronoi.attractorSystem.showAttractorEdge){
+		// set edgeline color first
+		ofSetColor(255, 0, 255);
 		for (int i = 0; i < edgeLine.size(); i++) {
 			edgeLine[i].draw();
 		}

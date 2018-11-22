@@ -9,6 +9,13 @@
 
 Particle::Particle(ofVec2f _location, float _spawnSpeed) {
     particleColor = ofColor::fromHsb(ofRandom(0,255), 255, 255);
+    
+    if (ofRandom(0,1) >= 0.5) {
+        particleColorChoice = false;
+    } else {
+        particleColorChoice = true;
+    }
+    
     particleMass = ofRandom(1,4);
     
     location.set(_location.x,_location.y);

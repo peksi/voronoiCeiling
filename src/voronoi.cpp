@@ -160,7 +160,7 @@ void Voronoi::draw(vector<ofPolyline> bounds){
                             
                             // Values are rgb(255,51,255)converted to floatColor (Junction MAGENTA).
                             float stepSize = 0.02;
-                            if (j % 2 == 0) {
+                            if (tempParticle.particleColorChoice) {
                                 if((tempColor[0] <= 1.0 - stepSize) * particleNoiseValue){
                                     tempColor[0] += stepSize;
                                 } else if ((tempColor[0] > 1.0 + stepSize) * particleNoiseValue) {
