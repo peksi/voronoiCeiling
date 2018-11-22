@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofBackground(40);
-    ofSetFrameRate(50);
+    ofSetFrameRate(30);
     
     // Graphics setup
     ofEnableAlphaBlending();
@@ -33,7 +33,7 @@ void ofApp::setup(){
     voronoiGui.setPosition(attractorGui.getPosition().x,
                              attractorGui.getPosition().y+attractorGui.getHeight() + 20);
     
-    edgeLineFlag = true;
+    edgeLineFlag = false;
     
 }
 
@@ -72,12 +72,16 @@ void ofApp::draw(){
     ofBackground(0);
     
     if(voronoi.initialized && voronoi.showVoronoi){
-        voronoi.draw(edgeLine);
+		voronoi.draw(edgeLine);
     }
     
     // voronoi edge line
     if(voronoi.attractorSystem.showAttractorEdge){
-        edgeLine.draw();
+		for (int i = 0; i < edgeLine.size(); i++) {
+			edgeLine[i].draw();
+		}
+		tempEdgeLine.draw();
+        
     }
     
     // gui
@@ -97,17 +101,23 @@ void ofApp::keyPressed(int key){
     } else if (key == 'p') { // create particle attractor
         voronoi.attractorSystem.createAttractor();
     } else if (key == 'l'){ // toggle edgeline and make it complete
-        if(edgeLineFlag && edgeLine.getVertices().size() > 0){
-            edgeLine.addVertex(edgeLine.getVertices()[0]);
-            
+        if(edgeLineFlag){ // close edgeline
+            tempEdgeLine.addVertex(tempEdgeLine.getVertices()[0]);
+			edgeLine.push_back(tempEdgeLine);
+            // clear tempEdgeline
+			tempEdgeLine.clear();
+			edgeLineFlag = false;
             // and initialize the voronoi inside the blob
-            voronoi.initialize(edgeLine);
+           	//voronoi.initialize(edgeLine);
             
         } else { // if there is no blob just continue
             edgeLineFlag = !edgeLineFlag;
-            cout << "no edgeBlob \n";
+            cout << "Start drawing new edgeblo";
         }
-    }
+	}
+	else if (key == 'i') {
+		voronoi.initialize(edgeLine);
+	}
 }
 
 //--------------------------------------------------------------
@@ -132,11 +142,12 @@ void ofApp::mousePressed(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-    if( !voronoi.initialized) {
+    if(edgeLineFlag) {
         ofPoint pt;
         pt.set(x, y);
-        edgeLine.addVertex(pt);
+        tempEdgeLine.addVertex(pt);
     } else {
+		// cout << "Trying to add new attractor point";
         voronoi.attractorSystem.setAttractor();
     }
     

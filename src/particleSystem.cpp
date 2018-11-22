@@ -57,15 +57,18 @@ void ParticleSystem::removeParticles() {
     }
     
     if (activeParticleRemove == true) {
-        for(vector<Particle>::iterator particleIterator = particleVector.begin();
-            particleIterator != particleVector.end();){
-            
-            if ((*particleIterator).isDead) {
-                particleVector.erase(particleIterator);
-            } else {
-                ++particleIterator;
-            }
-        }
+		if (particleVector.size() > 0) {
+			for (vector<Particle>::iterator particleIterator = particleVector.begin(); particleIterator != particleVector.end();) {
+
+				if ((*particleIterator).isDead) {
+					particleVector.erase(particleIterator);
+				}
+				else {
+					++particleIterator;
+				}
+			}
+		}
+
     }
 }
 void ParticleSystem::edgeDetect() {

@@ -38,7 +38,8 @@ public:
     
     // voronoi edge line
     
-    ofPolyline edgeLine;
+    vector<ofPolyline> edgeLine;
+	ofPolyline tempEdgeLine;
     bool edgeLineFlag;
     
     // GUI

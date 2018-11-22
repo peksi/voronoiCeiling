@@ -32,7 +32,7 @@ void AttractorSystem::setAttractor() {
                 attractorVector[i].setCornerPoints();
             }
         }
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < attractorVector.size(); j++) {
             attractorVector[attractorIndex].activateCornerPoint(j, false);
         } // Reset all activated cornerpoints
         

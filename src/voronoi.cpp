@@ -10,14 +10,16 @@ Voronoi::Voronoi() {
     
 }
 
-void Voronoi::initialize(ofPolyline bounds){
+void Voronoi::initialize(vector<ofPolyline> bounds){
     initialized = true;
     
-    int minX = ofGetWidth();
-    int minY = ofGetHeight();
-    int maxX = 0;
-    int maxY = 0;
-    
+    int maxX = ofGetWidth();
+    int maxY = ofGetHeight();
+    int minX = 0;
+    int minY = 0;
+
+	/*
+
     for(int i = 0; i < bounds.getVertices().size(); i++){
         // x
         if(bounds[i][0] < minX){
@@ -37,9 +39,11 @@ void Voronoi::initialize(ofPolyline bounds){
             maxY = bounds[i][1];
         }
     }
+
+	*/
     
     //  Add the cell seed to the container
-    int nCells = 700;
+    int nCells = 5000;
     vector<glm::vec2> _points;
     for(int i = 0; i < nCells;i++){
         glm::vec2 newPoint = glm::vec2(ofRandom(minX,maxX), ofRandom(minY,maxY));
@@ -73,13 +77,20 @@ void Voronoi::initialize(ofPolyline bounds){
         vector<float> tempColorChannels;
         vector<ofFloatColor> tempColors;
         
-        for(int j = 0; j < tempCell.size(); j++){
+        for(int j = 0; j < tempCell.size(); j++){ // loop through every cell
             tempCell3d.push_back(ofVec3f(tempCell[j].x, tempCell[j].y, 0.0f));
             tempColorChannels.push_back(0);
             tempColorChannels.push_back(ofRandom(1.0));
             tempColorChannels.push_back(ofRandom(1.0));
+
+			bool tempInsideFlag = false;
+			for (int k = 0; k < bounds.size(); k++) { // check if cell is nside one of edgeLine loops
+				if (bounds[k].inside(tempCell[j].x, tempCell[j].y)) {
+					tempInsideFlag = true;
+				}
+			}
             
-            if(bounds.inside(tempCell[j].x, tempCell[j].y)){
+            if(tempInsideFlag){
                 tempColors.push_back(ofFloatColor(tempColorChannels[j], // Red channel
                                                   tempColorChannels[j+1], // Green channel
                                                   tempColorChannels[j+2]  // Blue channel
@@ -105,7 +116,7 @@ void Voronoi::initialize(ofPolyline bounds){
     }
 }
 
-void Voronoi::draw(ofPolyline bounds){
+void Voronoi::draw(vector<ofPolyline> bounds){
     
     // VBO
     for (int i = 0; i < vboVector.size();i++) {
@@ -212,7 +223,15 @@ void Voronoi::draw(ofPolyline bounds){
             // Valyes are rgb(0,255,153) converted to floatColor (Junction GREEN);
             // Values are rgb(53,226,223) converted to floatColor (Junction TURQUOISE);
             
-            if(!bounds.inside(vboVerts[i][j].x, vboVerts[i][j].y)){ // if we're out of bounds draw black
+			bool tempInsideBoundsFlag = false;
+
+			for (int k = 0; k < bounds.size(); k++) {
+				if (bounds[k].inside(vboVerts[i][j].x, vboVerts[i][j].y)) {
+					tempInsideBoundsFlag = true;
+				}
+			}
+
+            if(!tempInsideBoundsFlag){ // if we're out of bounds draw black
                 
                 vboColor[i][j] = ofFloatColor(0,0,0);
                 
