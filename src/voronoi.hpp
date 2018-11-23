@@ -7,6 +7,7 @@
 class Voronoi {
 public:
     void initialize(vector<ofPolyline> bounds);
+	void destroy();
     bool initialized;
     void draw(vector<ofPolyline> bounds);
     
@@ -20,6 +21,7 @@ public:
     ofParameterGroup voronoiParameters;
     ofParameter<bool> showVoronoi;
     ofParameter<bool> backgroundColorSet;
+	ofParameter<int> cellAmount;
     
     // VBO
     vector<ofVbo> vboVector;

@@ -78,7 +78,7 @@ void Attractor::display(bool _showEdge, bool _showPoints, bool _showFill) {
             ofSetColor(0,255,0);
         } else {
             // Color when being editted
-            ofSetColor(255, 0, 0,50);
+            ofSetColor(255, 0, 0);
         }
         if (_showPoints == true) {
             // Draw cornerpoints

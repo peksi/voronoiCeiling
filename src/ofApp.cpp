@@ -74,6 +74,9 @@ void ofApp::draw(){
     if(voronoi.initialized && voronoi.showVoronoi){
 		voronoi.draw(edgeLine);
     }
+
+	voronoi.attractorSystem.displayAttractors();
+	voronoi.particleSystem.displayParticles();
     
     // voronoi edge line
     if(voronoi.attractorSystem.showAttractorEdge){
@@ -114,11 +117,18 @@ void ofApp::keyPressed(int key){
             
         } else { // if there is no blob just continue
             edgeLineFlag = !edgeLineFlag;
-            cout << "Start drawing new edgeblo";
+            cout << "Start drawing new edgeblob";
         }
 	}
 	else if (key == 'i') {
+		if (voronoi.initialized) {
+			voronoi.destroy();
+		}
 		voronoi.initialize(edgeLine);
+	}
+	else if (key == 'u') {
+		cout << "Undo one edgeLoop";
+		edgeLine.pop_back();
 	}
 }
 

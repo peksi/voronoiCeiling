@@ -16,7 +16,7 @@ public:
     void setup();
     void update();
     void draw();
-    
+
     
     bool guiHide;
     bool curve;

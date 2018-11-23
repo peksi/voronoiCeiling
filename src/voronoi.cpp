@@ -5,6 +5,7 @@ Voronoi::Voronoi() {
     voronoiParameters.setName("Voronoi GUI panel");
     voronoiParameters.add(showVoronoi.set("Show voronoi", false));
     voronoiParameters.add(backgroundColorSet.set("Color voronoi background",false));
+	voronoiParameters.add(cellAmount.set("Amount of voronoi cells", 1000, 0, 5000));
     
     initialized = false;
     
@@ -43,7 +44,7 @@ void Voronoi::initialize(vector<ofPolyline> bounds){
 	*/
     
     //  Add the cell seed to the container
-    int nCells = 5000;
+    int nCells = cellAmount;
     vector<glm::vec2> _points;
     for(int i = 0; i < nCells;i++){
         glm::vec2 newPoint = glm::vec2(ofRandom(minX,maxX), ofRandom(minY,maxY));
@@ -116,6 +117,17 @@ void Voronoi::initialize(vector<ofPolyline> bounds){
     }
 }
 
+void Voronoi::destroy() {
+	initialized = false;
+
+	vboColor.clear();
+	vboFaces.clear();
+	vboVerts.clear();
+
+	vboVector.clear();
+	relaxedVoronoi.clear();
+}
+
 void Voronoi::draw(vector<ofPolyline> bounds){
     
     // VBO
@@ -123,11 +135,7 @@ void Voronoi::draw(vector<ofPolyline> bounds){
         glPointSize(10.f);
         vboVector[i].drawElements(GL_POLYGON, vboVerts[i].size()); // placeholder values
     }
-    
-    // particle system
-    particleSystem.displayParticles();
-    attractorSystem.displayAttractors();
-    
+
     // Checking system
         for (int i = 0; i < voronoiCentroids.size(); i++) {
             for (int j = 0; j < particleSystem.particleVector.size(); j++) {
